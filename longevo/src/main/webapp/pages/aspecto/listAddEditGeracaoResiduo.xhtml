@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+         <h:form id="geracaoResiduoForm"> 
+             
+            <p:growl id="growl" autoUpdate="true" />
+            <p:toolbar id="tabBarResiduo" style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/residuo.png');background-repeat: no-repeat;background-position: 850px -10px;;background-size: 4%;">
+                     
+                <f:facet name="left">
+                        <p:commandButton value="#{labels.button_consulta}" update="lacaGeracaoResiduoDataTable" process="@this"
+                                      action="#{geracaoResiduoLancamentoMB.pesquisar}" icon="ui-icon-search" style="border-radius: 55px;" />
+                        
+                        <div style="margin-top: -25px;position: relative; left: 550px">
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.geracaoResiduo_title}</h1>
+                        </div>
+                        
+                </f:facet>
+                        
+                <f:facet name="right">
+
+                        <div style="position: fixed; top: 100px; right: 10px">
+                            <h:outputLink value="#{request.contextPath}/pages/aspecto/listAddEdit.faces" title="#{labels.geracaoResiduo_title}">
+                                <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                            </h:outputLink> 
+                        </div> 
+                    
+                        <p:commandButton value="#{labels.button_save}" ajax="false" icon="ui-icon-check"
+                               action="/pages/aspecto/listAddEditGeracaoResiduo.faces"              
+                               actionListener="#{geracaoResiduoLancamentoMB.saveOrUpdate}"  style="border-radius: 55px;" />
+
+                        <p:spacer width="3"/>
+                        <p:commandButton value="#{labels.button_add}" immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                               action="/pages/aspecto/listAddEditGeracaoResiduo.faces"              
+                               actionListener="#{geracaoResiduoLancamentoMB.add}"  style="border-radius: 55px;margin-right: 43px" />
+                    
+                   </f:facet>
+            </p:toolbar>             
+            
+            <h:panelGrid columns="2">
+              <h:panelGrid columns="2" title="#{labels.geracaoResiduo_tipo}"    styleClass="grid-fundo-borda">
+                <p:spacer/>
+                <p:selectOneRadio  id="gridBox" value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.descricao}" required="true" requiredMessage="#{labels.geracaoResiduo_tipo}" layout="grid" style="font-size: 13px;" columns="3">
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_papel}" itemValue="#{labels.geracaoResiduo_papel}" />
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_plastico}" itemValue="#{labels.geracaoResiduo_plastico}" />
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_organico}" itemValue="#{labels.geracaoResiduo_organico}" />                    
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_lampada}" itemValue="#{labels.geracaoResiduo_lampada}" />                    
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_bateria}" itemValue="#{labels.geracaoResiduo_bateria}" />                    
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_geral}" itemValue="#{labels.geracaoResiduo_geral}" />                    
+                    <f:selectItem itemLabel="#{labels.geracaoResiduo_solido}" itemValue="#{labels.geracaoResiduo_solido}" />                    
+
+                    <p:ajax event="change" update="tabGeracaoResiduo" listener="#{geracaoResiduoLancamentoMB.setaTipoResiduo}"/>
+
+
+                </p:selectOneRadio>            
+               </h:panelGrid>
+            
+                
+                <p:tabView  id="tabGeracaoResiduo">
+                    <p:tab title="#{labels.geracaoResiduo_lanca}" >
+                        <h:panelGrid id="panelLanca" columns="5" >
+                            <h:outputText value="#{labels.geracaoResiduo_ano}"/>
+                            <h:outputText value="#{labels.geracaoResiduo_mes}"/>
+                            <p:outputLabel value="#{labels.geracaoResiduo_documento}" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_unidadade}" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_quantidade}" />
+                           
+                            <p:spinner id="anobase" label="#{labels.geracaoResiduo_ano}" value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.ano}" required="true"  min="2013" max="2030" size="2">
+                                <p:ajax event="change" process="@this" listener="#{geracaoResiduoLancamentoMB.carregaAno}" />
+                            </p:spinner>
+                    
+                            <p:selectOneMenu value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.mes}" required="true" label="#{labels.geracaoResiduo_mes}">
+                                <f:selectItems value="#{geracaoResiduoLancamentoMB.mes}"  var="Mes"
+                                       itemValue="#{mes}" itemLabel="#{Mes.descricao}" />
+                                <p:ajax event="change" process="@this" listener="#{geracaoResiduoLancamentoMB.carregaMes}"/>
+                            </p:selectOneMenu>    
+                            
+                            <p:inputText label="#{labels.geracaoResiduo_documento}"    value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.documentoref}" size="25" >
+                                 <p:ajax event="blur" process="@this" listener="#{geracaoResiduoLancamentoMB.carregaDocumento}"/>
+                            </p:inputText>
+                            
+                            <p:selectOneMenu value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.unidade}" style="width: 150px;" label="#{labels.geracaoResiduo_unidade}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{geracaoResiduoLancamentoMB.unidade}" var="Unidade"
+                                        itemValue="#{unidade}" itemLabel="#{Unidade.descricao}"/>
+                            </p:selectOneMenu>                    
+                            <p:inputText label="#{labels.geracaoResiduo_quantidade}" value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.quantidade}" style="text-align: right;" size="5" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_datapesa}" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_destino}" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_etapa}" />
+                            <p:outputLabel value="#{labels.geracaoResiduo_custo}" />
+                            <h:panelGrid></h:panelGrid>
+
+                            <p:calendar value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.dataPesagem}"  size="10" pattern="dd/MM/yyyy"  label="#{labels.geracaoResiduo_datapesa}: "/>
+                            <p:selectOneMenu value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.destinoResiduo}" label="#{labels.geracaoResiduo_destino}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{geracaoResiduoLancamentoMB.destinoResiduo}"  var="DestinoResiduo"
+                                       itemValue="#{destinoResiduo}" itemLabel="#{DestinoResiduo.descricao}" />
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.etapa}" label="#{labels.geracaoResiduo_etapa}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{geracaoResiduoLancamentoMB.etapa}"  var="Etapa"
+                                       itemValue="#{etapa}" itemLabel="#{Etapa.descricao}" />
+                            </p:selectOneMenu>
+                            <p:inputText label="#{labels.geracaoResiduo_custo}"    value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.custoDestino}" style="text-align: right;" size="5">
+                                <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" locale="#{configSettingsMB.localeCode}" />
+                            </p:inputText>                             
+
+                        </h:panelGrid> 
+                    </p:tab>
+                </p:tabView>
+                <p:outputLabel value="#{labels.geracaoResiduo_observacao}" style="margin-left: 400px"/>
+                <p:inputTextarea value="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo.observacao}" rows="2" autoResize="false" style="width: 98%" />		
+
+            </h:panelGrid>    
+            
+            <p:dataTable id="lacaGeracaoResiduoDataTable" value="#{geracaoResiduoLancamentoMB.geracoesLancadas}" style="margin-top: 50px"
+                    lazy="true" var="lancaGeracaoResiduo"
+                    emptyMessage="#{labels.geracaoResiduo_load}" 
+                    paginator="true" rows="5" paginatorPosition="top"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowKey="#{lancaGeracaoResiduo.id}"
+                    selectionMode="single">
+                    
+                    <p:column style="width: 100px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_documento}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.documentoref}" />
+                    </p:column>
+
+                    <p:column style="width: 120px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_descricao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.descricao}" />
+                    </p:column>
+
+                    
+                    <p:column style="text-align: right;width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_quantidade}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.quantidade}" />
+                    </p:column>
+                
+                
+                    <p:column style="text-align: center;width: 30px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_unidade}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.unidade}" />
+                    </p:column>
+
+                    <p:column style="text-align: right; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_custo}" >
+                                <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" locale="#{configSettingsMB.localeCode}"/>
+                            </h:outputText>    
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.custoDestino}" />
+                    </p:column>
+                
+                    <p:column style="text-align: center; width: 60px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_destino}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.destinoResiduo}" />
+                    </p:column>                
+                
+                    <p:column style="text-align: center; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_mes}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.mes}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: center; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_ano}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.ano}" />
+                    </p:column>
+
+                    <p:column style="width: 150px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.geracaoResiduo_observacao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaGeracaoResiduo.observacao}" />
+                    </p:column>
+                
+                    <p:column style="text-align: center;width: 80px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.menu_dataset}" />
+                        </f:facet>
+                        <p:commandButton icon="ui-icon-pencil" process="@this" update="@form" style="border-radius: 55px">
+        			<f:setPropertyActionListener value="#{lancaGeracaoResiduo}" 
+                                                             target="#{geracaoResiduoLancamentoMB.selectedGeracaoResiduo}" />
+			</p:commandButton>
+                        
+                        <p:commandButton icon="ui-icon-trash" process="@this" update="lacaGeracaoResiduoDataTable"
+                            action="#{geracaoResiduoLancamentoMB.delete(lancaGeracaoResiduo)}">
+                            <p:confirm icon="ui-icon-alert" header="#{labels.dialog_confirmacao}" 
+                                       message="#{labels.dialog_exclusao}" />
+	    		</p:commandButton>
+                        
+                    </p:column>
+                
+                    <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText=""/>
+                                <p:column footerText="#{labels.geracaoResiduo_total} " style="text-align:right"/>
+                                <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{geracaoResiduoLancamentoMB.acumuladoResiduoQtde}"  />
+                                    </f:facet>
+                                </p:column>
+                                <p:column footerText=""/>
+                                <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{geracaoResiduoLancamentoMB.acumuladoResiduoCusto}" >
+                                            <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>                                
+                            </p:row>
+                   </p:columnGroup>
+                
+                </p:dataTable>
+                
+         </h:form>    
+    </ui:define>
+    
+</ui:composition>    

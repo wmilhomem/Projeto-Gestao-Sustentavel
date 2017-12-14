@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+   
+    <ui:define name="content">
+       
+         <h:form id="producaoForm"> 
+            
+             
+            <p:growl id="growl" autoUpdate="true" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/produces.png');background-repeat: no-repeat;background-position: 910px 5px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                    <p:commandButton value="#{labels.button_cancel}" action="/pages/producao/listAddEdit.faces" icon="ui-icon-cancel" style="border-radius: 55px;" 
+                                  ajax="false"   immediate="true"/>
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_imprimir}" update="editor" icon="ui-icon-print"
+                                     action="#{producaoRelatorioExecucaoInstrumentoMB.montarRelatorioTexto}" style="border-radius: 55px"  />
+                      
+                  
+                    
+                        <div style="margin-top: -25px;position: relative; left: 540px">
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">Relatório Execução Instrumentos</h1>
+                        </div>
+                     
+                </f:facet>
+            </p:toolbar>                             
+            <p:editor id="editor" widgetVar="editorWidget"  value="#{producaoRelatorioExecucaoInstrumentoMB.text}" width="600" > 
+                
+            <p:panelGrid columns="4" id="painel" style="margin-top: 20px;margin-left: 30px">
+                <h:outputText value="#{labels.consumoAguaEnergia_ano}"/>
+                <p:spinner id="anobase" label="#{labels.producao_ano}" value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" required="true" min="2013" max="2030" size="2"/>
+                <p:commandButton value="#{labels.button_confirma}"  ajax="false" icon="ui-icon-play"
+                                     action="#{producaoRelatorioExecucaoInstrumentoMB.processar}" style="border-radius: 55px"  />
+            </p:panelGrid>
+              
+            <br/>
+            <p:panel id="relatorioExecucaoPanel" style="background-color: #E8E8E8 ;width: 800px; margin: auto;font-size: 11px;font-family: Helvetica, Verdana, sans-serif;color:  #000;" rendered="#{producaoRelatorioExecucaoInstrumentoMB.instrumentosExecucaoAgrupado.iterator().hasNext()}" >
+                <p/>
+                <h3>
+                   
+                      &nbsp;&nbsp;&nbsp;&nbsp;A produtividade é um dos fatores que mais impulsiona o consumo/geração, pois a tendência é
+                      quanto mais se produz, mais se consome e mais se gera. A produtividade do <h:outputText value="#{configSettingsMB.userEmpresa.razaoSocial}" style="color:navy;bold"/> será
+                      avaliada por sua execução física.<p/> 
+                      
+                      Para a análise de produtividade foram utilizados dados de execução física prevista e executada,
+                      mensal e anual, correspondente ao ano de <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/> e comparado ao ano de <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/>, mesmo período 
+                      (Tabela 1). É possível observar que no ano de <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/> a execução  prevista  ajustada é  a  princípio
+                      <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.totalGeralDiferencaPorcentagemAcumulado}%" style="color:navy;bold"><f:convertNumber type="percent" locale="#{configSettingsMB.localeCode}"/></h:outputText> maior do que a do ano de <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/>, em destaque observa-se o aumento do número de 
+                      cursos, orientações, palestra, seminários e oficinas a serem realizados.<p/> 
+                      
+                       Os instrumentos utilizados como base de dados foram: número de empresas atendidas, horas de 
+                       Consultorias, número de Cursos, número de orientações e número de palestras, oficinas e 
+                       seminários (Tabela 1). Esses instrumentos, dentre os outros, são considerados mais
+                       representativos no que se refere à produtividade, sendo tratados inicialmente em nível
+                       corporativo, observando as variações dentro da projeção mensal e anual.
+ 
+                </h3>
+                <p:spacer width="10"/>
+                
+                <h3>
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                  <b>Tabela 1-</b>Comparativo entre o somatório dos instrumentos físico previsto para <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/> e <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/>  
+                </h3>
+                <p:dataTable var="dadosProducao" value="#{producaoRelatorioExecucaoInstrumentoMB.instrumentosExecucaoAgrupado}" style="margin: auto" styleClass="tabela">
+                <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_tipo}" />
+                        </f:facet>  
+                    <h:outputText value="#{dadosProducao[0]}" />
+                </p:column>
+                <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_previsto_anual} (#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior})" />
+                        </f:facet>
+                        <h:outputText value="#{dadosProducao[1]}" />
+                </p:column>
+                    
+                <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_previsto_anual}(#{producaoRelatorioExecucaoInstrumentoMB.anoBase})" />
+                        </f:facet>
+                        <h:outputText value="#{dadosProducao[2]}" />
+                </p:column>                    
+
+                <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_diferenca})" />
+                        </f:facet>
+                        <h:outputText value="#{dadosProducao[3]}" />
+                </p:column>                    
+                    
+                 <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column style="text-align:center">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{labels.producao_total}" />
+                                    </f:facet>
+                                </p:column>                                
+                                <p:column>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.totalGeralAnoAnteriorAcumulado}">
+                                            <f:convertNumber type="number" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>    
+                                <p:column>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.totalGeralAnoBaseAcumulado}">
+                                            <f:convertNumber type="number" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>    
+                                <p:column>
+                                       <f:facet name="footer">
+                                            <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.totalGeralDiferencaPorcentagemAcumulado}%">
+                                                <f:convertNumber type="percent" locale="#{configSettingsMB.localeCode}"/>
+                                            </h:outputText>
+                                       </f:facet> 
+                                </p:column>
+                            </p:row>
+                   </p:columnGroup>      
+                    
+            </p:dataTable>
+            <p/>
+            <h3>
+                Em relação aos instrumentos previstos, até o momento, o número de empresas atendidas,
+                Cursos, Orientações, Palestras, oficinas e seminários são maiores em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/>, porém as horas de
+                Consultoria são menores quando comparado ao previsto em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/>.<p/>
+
+                Em relação à execução física dos instrumentos em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/>, considerando que todas as metas são
+                lançadas nos meses correspondentes, observa-se uma execução menor em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/> quando
+                comparado ao ano de <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/> (Tabela 2). 
+                <p/>
+                <p/>
+                
+            </h3>
+             <p:spacer width="10"/>
+            <h3>
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                  <b>Tabela 2-</b>Execução mensal dos instrumentos <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/> e <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/>  
+                </h3> 
+             
+                
+                <p:dataTable var="linha" value="#{producaoRelatorioExecucaoInstrumentoMB.instrumentosExecutadosMensal}">  
+                    
+                    <p:columns value="#{producaoRelatorioExecucaoInstrumentoMB.columns}" var="column" columnIndexVar="colIndex" style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}" style="text-align: center" />
+                        </f:facet>
+                        <h:outputText value="#{linha[column.property]}" />
+                    </p:columns>
+                </p:dataTable>
+             <h3>
+                   O mês com maior número de empresas atendidas, horas de consultoria, cursos e orientações, 
+                   tendo como base o somatório dos instrumentos, considerado o período de janeiro a <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.mesBase}" style="color:navy;bold"/>, foi o
+                   mês de Maio em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoAnterior}" style="color:navy;bold"/> e o mês de Abril em <h:outputText value="#{producaoRelatorioExecucaoInstrumentoMB.anoBase}" style="color:navy;bold"/>.  
+             </h3>
+            </p:panel> 
+           </p:editor> 
+       </h:form>    
+    </ui:define>
+    
+</ui:composition>                

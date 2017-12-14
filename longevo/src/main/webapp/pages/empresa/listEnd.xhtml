@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <p:dataTable  value="#{empresaAddEditMB.empresa.enderecos}" var="endereco" scrollable="true"
+                  emptyMessage="#{labels.empresa_endereco_load}"  editable="true"  scrollHeight="120" id="tabelaEnderecos">
+        
+      
+		<p:column headerText="#{labels.empresa_logradouro}" style="text-align: center; width: 100px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.logradouro}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.logradouro}"  style="width: 200px" size="50" required="true" /></f:facet>
+                    </p:cellEditor>
+		</p:column>
+
+                <p:column headerText="#{labels.empresa_numero}" style="text-align: center; width: 50px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.numero}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.numero}"  size="2" style="text-align: right;" required="true" /></f:facet>
+                    </p:cellEditor>
+		</p:column>
+        
+                <p:column headerText="#{labels.empresa_complemento}" style="text-align: center; width: 100px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.complemento}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.complemento}"  size="20" /></f:facet> 
+                    </p:cellEditor>
+		</p:column>
+        
+		<p:column headerText="#{labels.empresa_cep}" style="text-align: center; width: 50px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.cep}" /></f:facet>
+                        <f:facet name="input"><p:inputMask value="#{endereco.cep}" mask="99-999-999" size="7" style="text-align: center;"/></f:facet>
+                    </p:cellEditor>
+		</p:column>
+
+		<p:column headerText="#{labels.empresa_bairro}" style="text-align: center; width: 100px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.bairro}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.bairro}"  size="20" /></f:facet>
+                    </p:cellEditor>    
+		</p:column>
+
+		<p:column headerText="#{labels.empresa_cidade}" style="text-align: center; width: 100px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.cidade}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.cidade}"  size="20" /></f:facet>
+                    </p:cellEditor>
+		</p:column>
+        
+                <p:column headerText="#{labels.empresa_uf}" style="width: 100px;text-align: center">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.uf}" /></f:facet>
+                        <f:facet name="input"><p:selectOneMenu value="#{endereco.uf}" label="#{labels.empresa_uf}" style="width: 150px">
+                                                    <f:selectItem itemLabel="Selecione" />
+                                                    <f:selectItems value="#{empresaAddEditMB.estado}" var="Estado"
+                                                        itemValue="#{estado}" itemLabel="#{Estado.descricao}"/>
+                                            </p:selectOneMenu>
+                        </f:facet>    
+                    </p:cellEditor>    
+                </p:column>
+        
+                <p:column headerText="#{labels.empresa_pais}" style="text-align: center; width: 100px">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{endereco.pais}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{endereco.pais}"  size="20" /></f:facet> 
+                    </p:cellEditor>
+		</p:column>
+        
+        
+                 <p:column headerText="#{labels.menu_dataset}" style="text-align: center;width: 50px">
+                    <p:rowEditor/>
+                    <p:commandButton icon="ui-icon-circle-plus" style="border-radius: 85px;" update="tabelaEnderecos"
+                                     actionListener="#{empresaAddEditMB.empresa.adicionarEnderecoVazio}" title="#{labels.button_add}">
+                            
+                    </p:commandButton>
+                    
+                    <p:commandButton icon="ui-icon-trash" title="#{labels.button_delete}"  oncomplete="confirmacaoExclusao.show()"
+	    					process="@this" update="tabelaEnderecos">
+                        <f:setPropertyActionListener target="#{empresaAddEditMB.selectedEndereco}" 
+                                                     value="#{endereco}" />
+                    </p:commandButton>
+
+                </p:column>
+        
+    </p:dataTable>
+    
+    <p:confirmDialog header="#{labels.empresa_title}" 
+                     message="#{labels.dialog_exclusao} #{empresaAddEditMB.selectedEndereco}" appendTo="@(body)"
+	    		widgetVar="confirmacaoExclusao"	id="confirmacaoExclusaoDialog">
+	    		<p:button value="Não" onclick="confirmacaoExclusao.hide(); return false;" />
+	    		<p:commandButton value="Sim" oncomplete="confirmacaoExclusao.hide();"
+                                         action="#{empresaAddEditMB.delete}" process="@this"
+	    			update="tabelaEnderecos" />
+    </p:confirmDialog>
+            		
+</ui:composition>

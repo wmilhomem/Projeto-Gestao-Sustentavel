@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+       
+           
+
+            <h:form id="empresaForm">
+        
+              <p:growl id="growl" autoUpdate="true" />
+       
+                <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/empresa.png');background-repeat: no-repeat;background-position: 720px 5px;;background-size: 2%;">
+                     
+                    <f:facet name="left">
+                       
+                        <p:commandButton value="#{labels.button_consulta}" icon="ui-icon-search" style="border-radius: 55px;"
+                                         actionListener="#{empresaMB.pesquisar}" process="@form" update="empresaDataTable"   />
+                        <p:spacer width="3"/>
+	    		<p:commandButton value="#{labels.button_add}" icon=" ui-icon-circle-plus" style="border-radius: 55px;"
+                                    action="/pages/empresa/addEdit.faces" ajax="false" />
+                        
+                        <div id="id-impres" style="margin-top: -25px;margin-left: 590px;" >
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.empresa_title}</h1>
+                        </div>
+                   </f:facet>
+                   
+	    	</p:toolbar>      
+               
+                <h:panelGrid columns="8"  cellpadding="2" style="font-size: 12px;width: 100%;margin-top: 20px"  styleClass="grid-fundo-borda">
+                   
+                    <p:outputLabel value="#{labels.empresa_razao}: "/>
+                    <p:inputText value="#{empresaMB.filtro.razaoSocial}" size="50" placeholder="digite e empresa a consultar..." />
+
+                    <p:outputLabel value="#{labels.empresa_cidade}: "/>
+                    <p:inputText value="#{empresaMB.filtro.cidade}" size="30" placeholder="digite a cidade a consultar..." />
+
+                    <p:outputLabel value="#{labels.empresa_uf}: " />
+                    <p:selectOneMenu value="#{empresaMB.filtro.uf}" >
+                        <f:selectItem itemLabel="Selecione" />
+                        <f:selectItems value="#{empresaMB.uf}" var="uf"
+                                       itemValue="#{uf}" itemLabel="#{uf.descricao}"/>
+                    </p:selectOneMenu>
+
+                    
+                    <p:outputLabel value="#{labels.empresa_porte}: " />
+                    <p:selectOneMenu value="#{empresaMB.filtro.porte}" label="#{labels.empresa_porte}" >
+                        <f:selectItem itemLabel="Selecione" />
+                        <f:selectItems value="#{empresaMB.porte}" var="porte"
+                                   itemValue="#{porte}" itemLabel="#{porte.descricao}"/>
+                    </p:selectOneMenu>
+                    
+                </h:panelGrid>    
+                  
+                <p:dataTable id="empresaDataTable" value="#{empresaMB.empresas}" lazy="true" var="empresa"
+                    paginator="true" paginatorPosition="top"  rows="5"        
+                    style="width: 100%;margin-top: 20px" 
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    emptyMessage="#{labels.empresa_load}" >
+                    
+                    <p:column style="width: 350px" sortBy="#{empresa.razaoSocial}">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_razao}" />
+                        </f:facet>
+                        <h:outputText value="#{empresa.razaoSocial}"  />
+                    </p:column>
+                    
+                    <p:column style="text-align: center;width: 130px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_cnpj}" />
+                        </f:facet>
+                        <h:outputText value="#{empresa.cnpj}" />
+                    </p:column>
+                    
+                     <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_ramoAtividade}" />
+                        </f:facet>
+                         <h:outputText value="#{empresa.ramoAtividade.descricao}" />
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_responsavel}" />
+                        </f:facet>
+                        <h:outputText value="#{empresa.responsavel}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_abertura}" />
+                        </f:facet>
+                        <h:outputText value="#{empresa.dataAbertura}" >
+                            <f:convertDateTime type="date" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.menu_dataset}" />
+                        </f:facet>
+                        <p:button outcome="/pages/empresa/addEdit.faces"  style="border-radius: 55px;" icon="ui-icon-pencil" title="#{labels.button_update}">
+                            <f:param name="empresa" value="#{empresa.id}" />
+	    		</p:button>
+                        
+                        <p:commandButton icon="ui-icon-trash" process="@this" update="empresaDataTable"
+                            action="#{empresaMB.delete(empresa)}">
+                            <p:confirm icon="ui-icon-alert" header="#{labels.dialog_confirmacao}" 
+                                       message="#{labels.dialog_exclusao}" />
+	    		</p:commandButton>
+                        
+                    </p:column>
+               </p:dataTable>
+               
+            </h:form>
+    </ui:define>
+</ui:composition>

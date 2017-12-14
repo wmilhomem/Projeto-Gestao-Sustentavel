@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+         <f:metadata>
+             <o:viewParam name="usuario" value="#{usuarioAddEditMB.usuario}" />
+             <f:event listener="#{usuarioAddEditMB.inicializar}" type="preRenderView" />
+    	</f:metadata>
+        <h:form>
+
+            <p:growl id="growl" />
+            <p:focus for="nomeuser" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/usuario.png');background-repeat: no-repeat;background-position: 700px 5px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                     <p:commandButton value="#{labels.button_pesquisa}" immediate="true" icon="ui-icon-search"
+                            action="/pages/usuario/list.faces"   style="border-radius: 55px;margin-right: 43px" ajax="false" />
+                        
+                    <div style="margin-top: -25px;margin-left: 590px">
+                         <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.user_title}</h1>
+                    </div>
+                     
+                     
+                </f:facet>
+                
+                <f:facet name="right">
+                    <div style="position: fixed; top: 100px; right: 10px">
+                        <h:outputLink value="#{request.contextPath}/pages/aquisicao/listAddEdit.faces" title="#{labels.producao_title}">
+                            <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                        </h:outputLink> 
+                    </div> 
+                         
+                    <p:commandButton value="#{labels.button_save}" icon="ui-icon-check" style="border-radius: 55px;"
+                            action="/pages/usuario/addEdit.faces"      
+                            actionListener="#{usuarioAddEditMB.saveOrUpdate}" ajax="false" />
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_add}"  immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                            action="/pages/usuario/addEdit.faces"      
+                            actionListener="#{usuarioAddEditMB.add}"  style="border-radius: 55px;margin-right: 43px" />
+                         
+                </f:facet>
+            </p:toolbar>    
+            
+            <p:panelGrid columns="2" style="width: 100%; margin-top: 20px;border: none;" columnClasses="rotulo, campo">
+                
+                <p:outputLabel value="#{labels.user_name}: " />
+                <p:inputText id="nomeuser" label="#{labels.user_name}: " value="#{usuarioAddEditMB.usuario.nome}"  size="70"/>
+                
+                <p:outputLabel value="#{labels.user_username}: " />
+                <p:inputText  label="#{labels.user_username}: " value="#{usuarioAddEditMB.usuario.username}" />
+                
+                <p:outputLabel value="#{labels.user_password}: " />
+                <p:password label="#{labels.user_password}: " value="#{usuarioAddEditMB.usuario.senha}" feedback="true" promptLabel="Digite uma senha segura" goodLabel="Boa" weakLabel="Razoável" strongLabel="Excelente"/>
+                
+                <p:outputLabel value="#{labels.user_perfil}" />
+                <p:selectOneMenu id="perfilAcessoCombo" value="#{usuarioAddEditMB.usuario.perfilAcesso.id}" required="true" label="#{labels.user_perfil}" style="width:150px;" >
+                    <f:selectItem itemLabel="Selecione" itemValue=""/>
+                    <f:selectItems value="#{usuarioAddEditMB.perfilAcessos}" var="perfilAcesso"  
+                                   itemLabel="#{perfilAcesso.descricao}" itemValue="#{perfilAcesso.id}" />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="#{labels.user_email}: " />
+                <p:inputText label="#{labels.user_email}: " value="#{usuarioAddEditMB.usuario.email}" size="50"/>
+
+                <p:outputLabel value="#{labels.user_empresa}" />
+                <p:selectOneMenu id="empresaCombo" value="#{usuarioAddEditMB.usuario.empresa.id}" required="true" label="#{labels.user_empresa}" style="width:450px;" >
+                    <f:selectItem itemLabel="Selecione" itemValue=""/>  
+                    <f:selectItems value="#{usuarioAddEditMB.empresas}" var="empresa" 
+                                   itemLabel="#{empresa.razaoSocial}" itemValue="#{empresa.id}"/>
+                </p:selectOneMenu>
+                <h:outputText value="#{labels.user_log}" />
+                <h:outputText value="#{usuarioAddEditMB.usuario.log}" style="font-style: italic;color: green;" />
+              
+                <h:outputText value="#{labels.user_data}" />
+                <h:outputText value="#{usuarioAddEditMB.usuario.dataCriacao}" style="font-style: italic;color: green;" >
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                </h:outputText>
+                
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

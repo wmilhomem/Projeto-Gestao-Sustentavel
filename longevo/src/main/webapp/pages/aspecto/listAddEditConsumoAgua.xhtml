@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+         <h:form id="aspectoForm"> 
+             
+            <p:growl id="growl" autoUpdate="true" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/agua.png');background-repeat: no-repeat;background-position: 835px 3px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                        <p:commandButton value="#{labels.button_consulta}" update="consumoAguaEnergiaDataTable :aspectoForm:pieAcumulo" process="@this"
+                                      action="#{consumoAguaEnergiaLancamentoMB.pesquisar('AGUA')}" icon="ui-icon-search" style="border-radius: 55px;" />
+                        
+                        <div style="margin-top: -25px;position: relative; left: 550px">
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.consumoAguaEnergia_title}</h1>
+                        </div>
+                        
+                </f:facet>            
+                        
+                <f:facet name="right">
+                    
+
+                        <div style="position: fixed; top: 100px; right: 10px">
+                            <h:outputLink value="#{request.contextPath}/pages/aspecto/listAddEdit.faces" title="#{labels.consumoAguaEnergia_title}">
+                                <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                            </h:outputLink> 
+                        </div> 
+                    
+                        <p:commandButton value="#{labels.button_save}" ajax="false" icon="ui-icon-check"
+                               action="/pages/aspecto/listAddEditConsumoAgua.faces"            
+                               actionListener="#{consumoAguaEnergiaLancamentoMB.saveOrUpdate('AGUA')}"  style="border-radius: 55px;mar" />
+
+                        <p:spacer width="3"/>
+                        <p:commandButton value="#{labels.button_add}"  immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                               action="/pages/aspecto/listAddEditConsumoAgua.faces"    
+                               actionListener="#{consumoAguaEnergiaLancamentoMB.add}"  style="border-radius: 55px;margin-right: 43px" />
+                    
+                </f:facet>
+            </p:toolbar>             
+
+            <h:panelGrid columns="3">
+                
+                <p:tabView  id="tabAspectoAgua" style="margin-top: -128px;width: 210px" >
+                    
+                    <p:tab  title="#{labels.consumoAguaEnergia_consumo_agua}" >
+
+                        <h:panelGrid columns="2" title="#{labels.consumoAguaEnergia_tipo_agua}"    styleClass="grid-fundo-borda" >
+                            <p:spacer/>
+                            <p:selectOneRadio  id="gridBox" value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.descricao}" required="true" requiredMessage="#{labels.consumoAguaEnergia_tipo_agua}" layout="grid" style="font-size: 13px;" columns="1">
+                                <f:selectItem itemLabel="#{labels.consumoAguaEnergia_aguaconcecao}" itemValue="#{labels.consumoAguaEnergia_aguaconcecao}" />
+                                <f:selectItem itemLabel="#{labels.consumoAguaEnergia_aguaartesiano}" itemValue="#{labels.consumoAguaEnergia_aguaartesiano}" />
+                                <f:selectItem itemLabel="#{labels.consumoAguaEnergia_aguasemiarte}" itemValue="#{labels.consumoAguaEnergia_aguasemiarte}" />                    
+
+                                <p:ajax event="change"  update="tabAspectoAgua :aspectoForm:tabLancamento" listener="#{consumoAguaEnergiaLancamentoMB.setaTipoAspecto}"/>
+
+
+                            </p:selectOneRadio>            
+                        </h:panelGrid>
+                    </p:tab>
+        
+                </p:tabView>
+                     
+                     
+                <p:tabView  id="tabLancamento" style="margin-top: -98px" >
+                    <p:tab title="#{labels.consumoAguaEnergia_lanca}" >
+                        <h:panelGrid id="panelLanca" columns="6" >
+                            <h:outputText value="#{labels.consumoAguaEnergia_ano}"/>
+                            <h:outputText value="#{labels.consumoAguaEnergia_mes}"/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_documento}" />
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_qtde}" />
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_unidade}" />
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_total}" />
+                            <p:spinner id="anobase" label="#{labels.consumoAguaEnergia_ano}" value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.ano}" required="true" min="2013" max="2030" size="2">
+                                <p:ajax event="change" process="@this" listener="#{consumoAguaEnergiaLancamentoMB.carregaAno}" />
+                            </p:spinner>
+                    
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.mes}" required="true" label="#{labels.consumoAguaEnergia_mes}">
+                                <f:selectItems value="#{consumoAguaEnergiaLancamentoMB.mes}"  var="Mes"
+                                       itemValue="#{mes}" itemLabel="#{Mes.descricao}" />
+                                <p:ajax event="change" process="@this" listener="#{consumoAguaEnergiaLancamentoMB.carregaMes}"/>
+                            </p:selectOneMenu>                
+                            <p:inputText label="#{labels.consumoAguaEnergia_documento}"    value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.documentoref}" size="20" />
+                            <p:inputText label="#{labels.consumoAguaEnergia_qtde}"     value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.quantidadeConsumida}" style="text-align: right;" size="5" />
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.unidade}" style="width: 150px;" label="#{labels.consumoAguaEnergia_unidade}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{consumoAguaEnergiaLancamentoMB.unidade}" var="Unidade"
+                                        itemValue="#{unidade}" itemLabel="#{Unidade.descricao}"/>
+                            </p:selectOneMenu>                    
+                            <p:inputText label="#{labels.consumoAguaEnergia_total}"    value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.total}" styleClass="moeda" style="text-align: right;" size="5">
+                                <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" locale="#{configSettingsMB.localeCode}" />
+                            </p:inputText>                             
+                            
+                            
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_etapa}"/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_demanda}"/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_grupo_cliente}"/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_grupo_tarifario}"/>                            
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_manutencao}"/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_data_manutencao}" />
+                            
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.etapa}" label="#{labels.consumoAguaEnergia_etapa}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{consumoAguaEnergiaLancamentoMB.etapa}"  var="Etapa"
+                                       itemValue="#{etapa}" itemLabel="#{Etapa.descricao}" />
+                            </p:selectOneMenu>
+                            <p:inputText label="#{labels.consumoAguaEnergia_demanda}"    value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.demandaContratada}" style="text-align: right;" size="5" />                            
+                            
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.grupoCliente}" label="#{labels.consumoAguaEnergia_grupo_cliente}">
+                                  <f:selectItem itemLabel="A" itemValue="A" /> 
+                                  <f:selectItem itemLabel="B" itemValue="B" /> 
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.grupoTarifario}" label="#{labels.consumoAguaEnergia_grupo_tarifario}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{consumoAguaEnergiaLancamentoMB.grupoTarifario}"  var="GrupoTarifario"
+                                       itemValue="#{grupoTarifario}" itemLabel="#{GrupoTarifario.descricao}" />
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.manutencao}" label="#{labels.consumoAguaEnergia_manutencao}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{consumoAguaEnergiaLancamentoMB.manutencao}"  var="Manutencao"
+                                       itemValue="#{manutencao}" itemLabel="#{Manutencao.descricao}" />
+                            </p:selectOneMenu>
+                            <p:calendar value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.dataManutencao}"  size="10" pattern="dd/MM/yyyy"  label="#{labels.consumoAguaEnergia_data_manutencao}: "/>
+                            <p:outputLabel value="#{labels.consumoAguaEnergia_observacao}" style="margin-left: 50px;"/>
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:outputText value="#{labels.consumoAguaEnergia_log}"  />
+                            <h:outputText value="#{labels.consumoAguaEnergia_data}"  />
+                            <h:panelGrid></h:panelGrid>
+                            <p:inputTextarea value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.observacao}" rows="2" autoResize="false" style="width: 98%;" />		
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>                            
+                            <h:outputText value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.log}" style="font-style: italic;color: green;" />
+                            <h:outputText value="#{consumoAguaEnergiaLancamentoMB.selectedAspecto.dataCriacao}" style="font-style: italic;color: green;" >
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                            </h:outputText>
+                        </h:panelGrid> 
+                    </p:tab>
+                </p:tabView>
+                <p:chart id="pieAcumulo" type="pie" model="#{consumoAguaEnergiaLancamentoMB.pieModel1}" style="margin-top: 2px;width:290px;height:300px" />                
+            </h:panelGrid>  
+            
+            <p:dataTable id="consumoAguaEnergiaDataTable" value="#{consumoAguaEnergiaLancamentoMB.aspectosLancados}" style="margin-top: -35px"
+                    lazy="true" var="lancaConsumoAguaEnergia" emptyMessage="#{labels.consumoAguaEnergia_load}" 
+                    paginator="true" rows="5" paginatorPosition="top"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="5,10,20" rowKey="#{lancaConsumoAguaEnergia.id}"
+                    selectionMode="single">
+                    
+                    <p:column style="width: 100px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_documento}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.documentoref}" />
+                    </p:column>
+
+                    <p:column style="width: 90px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_descricao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.descricao}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;width: 40px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_consumo_tipo}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.consumoTipo}" />
+                    </p:column>
+                
+                    <p:column style="text-align: right;width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_qtde}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.quantidadeConsumida}" />
+                    </p:column>
+                
+                    <p:column style="text-align: center;width: 40px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_unidade}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.unidade}" />
+                    </p:column>
+
+                    <p:column style="text-align: right; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_total}"  >
+                                <f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" locale="#{configSettingsMB.localeCode}"/>
+                            </h:outputText>    
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.total}" />
+                    </p:column>
+                
+                    <p:column style="text-align: center; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_mes}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.mes}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: center; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_ano}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.ano}" />
+                    </p:column>
+
+                    <p:column style="width: 150px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_observacao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancaConsumoAguaEnergia.observacao}" />
+                    </p:column>
+                
+                    <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText="#{labels.consumoAguaEnergia_total} " style="text-align:right"/>
+                                <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{consumoAguaEnergiaLancamentoMB.acumuladoConsumo}"  />
+                                    </f:facet>
+                                </p:column>
+                                <p:column footerText=""/>
+                                <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{consumoAguaEnergiaLancamentoMB.acumuladoTotal}" >
+                                            <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                            </p:row>
+                   </p:columnGroup>
+                
+                
+                
+                    <p:column style="text-align: center;width: 80px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.menu_dataset}" />
+                        </f:facet>
+                        <p:commandButton icon="ui-icon-pencil" process="@this" update="@form :aspectoForm:tabAspectoAgua" style="border-radius: 55px" action="#{consumoAguaEnergiaLancamentoMB.editaConsumoDesc}" >
+        			<f:setPropertyActionListener value="#{lancaConsumoAguaEnergia}" 
+                                                             target="#{consumoAguaEnergiaLancamentoMB.selectedAspecto}" />
+			</p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" process="@this" update="consumoAguaEnergiaDataTable"
+                                         action="#{consumoAguaEnergiaLancamentoMB.delete(lancaConsumoAguaEnergia)}">
+                            <p:confirm icon="ui-icon-alert" header="#{labels.dialog_confirmacao}" 
+                                       message="#{labels.dialog_exclusao}" />
+	    		</p:commandButton>
+                        
+                    </p:column>
+                
+                </p:dataTable>
+        
+         </h:form>    
+    </ui:define>
+    
+            		
+</ui:composition>

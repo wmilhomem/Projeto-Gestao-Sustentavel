@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/longevo">
+  <Resource auth="Container" factory="org.jboss.weld.resources.ManagerObjectFactory" name="BeanManager" type="javax.enterprise.inject.spi.BeanManager"/>
+  <Resource acquireIncrement="1" auth="Container" checkoutTimeout="1800" driverClass="com.mysql.jdbc.Driver" factory="org.apache.naming.factory.BeanFactory" idleConnectionTestPeriod="100" jdbcUrl="jdbc:mysql://localhost:3306/longevo" maxPoolSize="15" minPoolSize="15" name="jdbc/longevo-biosystem" password="root" type="com.mchange.v2.c3p0.ComboPooledDataSource" user="root"/>
+</Context>

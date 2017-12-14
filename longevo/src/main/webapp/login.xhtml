@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/public/images/favicon.ico" />
+    <style type="text/css" title="mystyles" media="all">
+        body {
+            font-size: 12px; 
+            background-attachment: fixed;
+        }
+    
+    </style>
+     <h:outputStylesheet library="css" name="main.css"/>
+    <title>${messages.application_name}</title>
+</h:head>
+
+<h:body onload="document.content.dialog.login.j_username.focus();" >
+   
+    <div id="login-dialog" title="Biosystem Login" style="margin-top: 200px;" >
+        
+            <p:focus for="j_username"/>
+            <form name='login' action="j_spring_security_check" method='post'>
+                
+                  <h:panelGrid columns="1"  styleClass="grid-login" style="width: 450px; height: 350px;font-style: italic;color: black;">
+                    <h:panelGrid columns="1">
+                        <h:graphicImage name="/images/logo.png" width="180" height="65" style="margin-top: -90px;border-radius: 55px;border-color: #E8E8E8 !important;"/>
+                    </h:panelGrid>  
+                                                         
+                    <h:panelGrid columns="2" style="margin-left: 35px;margin-top: -110px">                  
+                        <h:outputLabel for="j_username" value="#{labels.login_username} " style="font-size: medium;font-weight: bold;color: #000" />
+                        <p:inputText id="j_username" size="15" required="true" />
+                    
+                        <h:outputLabel for="j_password" value="#{labels.login_password} " style="font-size: medium;font-weight: bold;color: #000" />
+                        <p:password id="j_password"  size="15" required="true" />
+                    </h:panelGrid>
+                    
+                    <f:facet name="footer">
+                        <p:row>
+                            <c:if test="${param.erro == 'true'}">
+                                <h:outputText value="#{labels.login_invalid}" style="margin-left: 110px;color: red; font-size: medium;" /> <br/> <br/>
+                            </c:if>
+                            
+                            <p:outputPanel style="width: 100%; text-align:center" layout="block">
+                                <input name="submit" type="submit" value="#{labels.login_action_go}"  style="margin-left: 155px;margin-top: 2px;border-radius: 25px;" />
+                            </p:outputPanel>
+                        </p:row>
+                    </f:facet>
+                </h:panelGrid>
+            </form>    
+       
+    </div>
+   
+</h:body>
+</html>

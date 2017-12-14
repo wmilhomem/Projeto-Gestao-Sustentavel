@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+         <h:form id="producaoForm"> 
+             
+            <p:growl id="growl" autoUpdate="true" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/produces.png');background-repeat: no-repeat;background-position: 820px 5px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                        <p:commandButton value="#{labels.button_consulta}" update="lacproducaoDataTable" process="@this"
+                                      action="#{producaoLancamentoMB.pesquisar}" icon="ui-icon-search" style="border-radius: 55px;margin-right: 43px" />
+
+                        <div style="margin-top: -25px;position: relative; left: 550px">
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.producao_title}</h1>
+                        </div>
+                        
+                </f:facet>
+                        
+                <f:facet name="right">
+                    
+                    <div style="position: fixed; top: 100px; right: 10px">
+                        <h:outputLink value="#{request.contextPath}/pages/producao/relatorioExecucaoInstrumento.faces" title="#{labels.producao_title}">
+                            <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                        </h:outputLink> 
+                    </div> 
+                        
+                    
+                    <p:commandButton value="#{labels.button_save}" ajax="false" icon="ui-icon-check"
+                               action="/pages/producao/listAddEdit.faces"  
+                               actionListener="#{producaoLancamentoMB.saveOrUpdate}"  style="border-radius: 55px;" />
+
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_add}"  immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                               action="/pages/producao/listAddEdit.faces"    
+                               actionListener="#{producaoLancamentoMB.add}"  style="border-radius: 55px;margin-right: 43px" />
+                        
+
+                </f:facet>
+            </p:toolbar>             
+
+            
+            <h:panelGrid columns="2">
+              <h:panelGrid columns="2" title="#{labels.producao_tipo}"    styleClass="grid-fundo-borda">
+                <p:spacer/>
+                <p:selectOneRadio  id="gridBox" value="#{producaoLancamentoMB.selectedProducao.descricao}" required="true" requiredMessage="#{labels.producao_tipo}" layout="grid" style="font-size: 13px;" columns="3">
+                    <f:selectItem itemLabel="#{labels.producao_consultoria}" itemValue="#{labels.producao_consultoria}" />
+                    <f:selectItem itemLabel="#{labels.producao_vendas}" itemValue="#{labels.producao_vendas}" />
+                    <f:selectItem itemLabel="#{labels.producao_area}" itemValue="#{labels.producao_area}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_evento}" itemValue="#{labels.producao_evento}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_empresa}" itemValue="#{labels.producao_empresa}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_cliente}" itemValue="#{labels.producao_cliente}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_produto}" itemValue="#{labels.producao_produto}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_faturamento}" itemValue="#{labels.producao_faturamento}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_orienta}" itemValue="#{labels.producao_orienta}" />                    
+                    <f:selectItem itemLabel="#{labels.producao_curso}"   itemValue="#{labels.producao_curso}" /> 
+                    <f:selectItem itemLabel="#{labels.producao_varias}" itemValue="#{labels.producao_varias}" /> 
+                    <p:ajax event="change" update="tabConsultoria" listener="#{producaoLancamentoMB.setaTipoProdutividade}"/>
+                </p:selectOneRadio>            
+               </h:panelGrid>
+            
+                
+                <p:tabView  id="tabConsultoria">
+                    <p:tab title="#{labels.producao_lanca}" >
+                        <h:panelGrid id="panelLanca" columns="9" >
+                            <h:outputText value="#{labels.producao_ano}"/>
+                            <h:outputText value="#{labels.producao_mes}"/>
+                            <p:outputLabel value="#{labels.producao_unidade}" />
+                            <p:outputLabel value="#{labels.producao_documento}" />
+                            <p:outputLabel value="#{labels.producao_previsto}" />
+                            <p:outputLabel value="#{labels.producao_realizado}" />
+                            <h:panelGrid><h:outputText value="#{labels.producao_horaprevista}" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}" /></h:panelGrid>
+                            <h:panelGrid><h:outputText value="#{labels.producao_hora}" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}" /></h:panelGrid>
+                            <h:panelGrid><h:outputText value="#{labels.producao_participante}" rendered="#{producaoLancamentoMB.tipoProdutividadeParticipante}" /></h:panelGrid>
+                            
+                            <p:spinner id="anobase" label="#{labels.producao_ano}" value="#{producaoLancamentoMB.selectedProducao.ano}" required="true" min="2013" max="2030" size="2">
+                                <p:ajax event="change" process="@this" update="selectMes" listener="#{producaoLancamentoMB.carregaAno}" />
+                            </p:spinner>
+                    
+                            <p:selectOneMenu id="selectMes" value="#{producaoLancamentoMB.selectedProducao.mes}" label="#{labels.producao_mes}">
+                                <f:selectItems value="#{producaoLancamentoMB.mes}"  var="Mes"
+                                       itemValue="#{mes}" itemLabel="#{Mes.descricao}" />
+                                <p:ajax event="change" process="@this" listener="#{producaoLancamentoMB.carregaMes}"/>
+                            </p:selectOneMenu>                
+                            
+                            <p:selectOneMenu value="#{producaoLancamentoMB.selectedProducao.unidade}" style="width: 150px;" label="#{labels.producao_unidade}">
+                                <f:selectItem itemLabel="Selecione" />
+                                <f:selectItems value="#{producaoLancamentoMB.unidade}" var="Unidade"
+                                        itemValue="#{unidade}" itemLabel="#{Unidade.descricao}"/>
+                            </p:selectOneMenu>                    
+                            <p:inputText label="#{labels.producao_documento}"    value="#{producaoLancamentoMB.selectedProducao.documentoref}" size="25" >
+                                <p:ajax event="blur" process="@this" listener="#{producaoLancamentoMB.carregaDocumento}"/>
+                            </p:inputText>
+                            <p:inputText label="#{labels.producao_previsto}"     value="#{producaoLancamentoMB.selectedProducao.quantidadePrevista}" style="text-align: right;" size="3" />
+                            <p:inputText label="#{labels.producao_realizado}"    value="#{producaoLancamentoMB.selectedProducao.quantidadeRealizada}" style="text-align: right;" size="3" />                            
+                            <p:inputText label="#{labels.producao_horaprevista}" value="#{producaoLancamentoMB.selectedProducao.quantidadePrevistaHoras}" required="true" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}"  style="text-align: right;" size="3" />                            
+                            <p:inputText label="#{labels.producao_hora}"         value="#{producaoLancamentoMB.selectedProducao.quantidadeHoras}" required="true" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}"  style="text-align: right;" size="3" />                            
+                            <p:inputText label="#{labels.producao_participante}" value="#{producaoLancamentoMB.selectedProducao.participantes}" required="true" rendered="#{producaoLancamentoMB.tipoProdutividadeParticipante}"  style="text-align: right;" size="3" />                                                        
+                        </h:panelGrid> 
+                    </p:tab>
+                </p:tabView>
+                <p:outputLabel value="#{labels.producao_observacao}" style="margin-left: 400px"/>
+                <p:inputTextarea value="#{producaoLancamentoMB.selectedProducao.observacao}" rows="2" autoResize="false" style="width: 98%" />		
+
+            </h:panelGrid>
+            
+            <h:panelGrid columns="4" style="margin-left: 450px" styleClass="rotulo, campo">
+                <h:outputText value="#{labels.producao_log}"  />
+                <h:outputText value="#{producaoLancamentoMB.selectedProducao.log}" style="font-style: italic;color: green;" />
+
+                <h:outputText value="#{labels.aquisicao_data}"  />
+                <h:outputText value="#{producaoLancamentoMB.selectedProducao.dataCriacao}" style="font-style: italic;color: green;" >
+                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                </h:outputText>
+            </h:panelGrid>
+            
+            <p:dataTable id="lacproducaoDataTable" value="#{producaoLancamentoMB.producoesLancadas}"
+                    lazy="true" var="lancProducao"  paginator="true"
+                    emptyMessage="#{labels.producao_load}" 
+                    rows="5" paginatorPosition="top" style="margin-top: 50px"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowKey="#{lancProducao.id}" selectionMode="single">
+                    
+                    <p:column style="width: 100px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_documento}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.documentoref}" />
+                    </p:column>
+
+                    <p:column style="width: 90px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_descricao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.descricao}" />
+                    </p:column>
+
+                    <p:column style="text-align: right;width: 60px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_previsto}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.quantidadePrevista}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: right;width: 60px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_realizado}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.quantidadeRealizada}" />
+                    </p:column>
+                
+                    <p:column style="text-align: right;width: 60px" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_horaprevista}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.quantidadePrevistaHoras}" />
+                    </p:column>
+                
+                
+                    <p:column style="text-align: right;width: 60px" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_hora}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.quantidadeHoras}" />
+                    </p:column>
+
+                    <p:column style="text-align: right;width: 60px" rendered="#{producaoLancamentoMB.tipoProdutividadeParticipante}">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_participante}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.participantes}" />
+                    </p:column>
+
+                
+                    <p:column style="text-align: center;width: 40px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_unidade}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.unidade}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: center; width: 50px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_mes}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.mes}" />
+                    </p:column>
+                    
+                    <p:column style="text-align: center; width: 40px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_ano}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.ano}" />
+                    </p:column>
+
+                    <p:column style="width: 150px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.producao_observacao}" />
+                        </f:facet>
+                        <h:outputText value="#{lancProducao.observacao}" />
+                    </p:column>
+                
+                    <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText=""/>
+                                <p:column footerText="Total " style="text-align:right"/>
+                                <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoLancamentoMB.acumuladoPrevisto}"  >
+                                          <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align:right"  >
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoLancamentoMB.acumuladoRealizado}" >
+                                            <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                
+                                 <p:column style="text-align:right">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoLancamentoMB.acumuladoPrevistoHora}"  >
+                                          <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                
+                                <p:column style="text-align:right"  >
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{producaoLancamentoMB.acumuladoHora}" >
+                                            <f:convertNumber type="currency" locale="#{configSettingsMB.localeCode}"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+  
+                                <p:column footerText="" rendered="#{producaoLancamentoMB.tipoProdutividadeParticipante}"/>
+                                <p:column footerText="" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}"/>
+                                <p:column footerText="" rendered="#{producaoLancamentoMB.tipoProdutividadeHora}"/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                <p:column footerText=""/>
+                                
+                            </p:row>
+                   </p:columnGroup>
+                    <p:column style="text-align: center;width: 80px">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.menu_dataset}" />
+                        </f:facet>
+                        <p:commandButton icon="ui-icon-pencil" process="@this" update="@form" style="border-radius: 55px">
+        			<f:setPropertyActionListener value="#{lancProducao}" 
+                                                             target="#{producaoLancamentoMB.selectedProducao}" />
+			</p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" process="@this" update="lacproducaoDataTable"
+                                         action="#{producaoLancamentoMB.delete(lancProducao)}">
+                            <p:confirm icon="ui-icon-alert" header="#{labels.dialog_confirmacao}" 
+                                       message="#{labels.dialog_exclusao}" />
+	    		</p:commandButton>
+
+                    </p:column>
+                
+                </p:dataTable>
+        
+         </h:form>    
+    </ui:define>
+    
+</ui:composition>    

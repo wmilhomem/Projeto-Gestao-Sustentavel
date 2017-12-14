@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+        <f:metadata>
+            <o:viewParam name="empresa" value="#{empresaAddEditMB.empresa}" />
+    	</f:metadata>
+
+        <h:form id="empresaForm" >
+            
+            <p:dialog id="pesqRazao" header="#{labels.button_consulta}"  widgetVar="selectEmpresa" showEffect="fade" hideEffect="explode" 
+                      width="700"  height="50" modal="true" appendTo="@(body)" style="font-size: 16px;font-weight: bold;border-radius: 15px" resizable="false" >
+                <p:panelGrid columns="3" columnClasses="rotulo, campo" >
+                    <p:outputLabel value="#{labels.empresa_razao}: "/>
+                    <p:autoComplete  styleClass="razao-empresa" size="60"  value="#{empresaAddEditMB.empresa}"
+                                var="empresa" itemLabel="#{empresa.razaoSocial}" itemValue="#{empresa}"
+                                completeMethod="#{empresaAddEditMB.completarRazaoEmpresa}" maxResults="10"
+                                minQueryLength="3" forceSelection="true" placeholder="digite ao menos 3 letras...">
+                        <p:ajax event="itemSelect" listener="#{empresaAddEditMB.carregaEmpresa}" 
+                                 update="empresaForm" />
+                    </p:autoComplete>
+                </p:panelGrid>  
+            </p:dialog>            
+
+            <p:growl id="growl" />
+            <p:focus for="razao" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/empresa.png');background-repeat: no-repeat;background-position: 720px 5px;;background-size: 2%;">
+                <f:facet name="left">
+                    
+                    <p:commandButton value="#{labels.button_pesquisa}" immediate="true" icon="ui-icon-search"
+                                    action="/pages/empresa/list.faces" ajax="false" style="border-radius: 55px;margin-right: 43px"  />
+                             
+                    <div style="margin-top: -25px;margin-left: 590px">
+                        <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.empresa_title}</h1>
+                    </div>
+                    
+                </f:facet>
+                <f:facet name="right">
+
+                    <div style="position: fixed; top: 100px; right: 10px">
+                        <h:outputLink value="#{request.contextPath}/pages/empresa/listAddEdit.faces" title="#{labels.producao_title}">
+                            <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                        </h:outputLink> 
+                    </div> 
+                    <p:commandButton value="#{labels.button_save}" ajax="false" icon="ui-icon-check"                                                                                                       
+                                action="/pages/empresa/addEdit.faces"
+                                actionListener="#{empresaAddEditMB.saveOrUpdate}" style="border-radius: 55px;" />
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_add}"  immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                                             action="/pages/empresa/addEdit.faces"    
+                                             actionListener="#{empresaAddEditMB.add}"  style="border-radius: 55px;margin-right: 43px" />
+                            
+                </f:facet>
+            </p:toolbar>
+            
+            <p:panelGrid columns="6" style="width: 100%; margin-top: 5px"  >
+                
+                <p:outputLabel value="#{labels.empresa_razao}: "/>
+                <p:inputText id="razao" value="#{empresaAddEditMB.empresa.razaoSocial}" style="width: 100%" >
+                    <p:ajax event="change" update="tabelaEnderecos"
+                                        listener="#{empresaAddEditMB.empresa.adicionarEnderecoVazio}" />
+                </p:inputText>
+                <p:commandButton onclick="PF('selectEmpresa').show();" immediate="true" icon="ui-icon-search" style="border-radius: 55px"/> 
+	        
+                <p:outputLabel value="#{labels.empresa_cnpj}: " />
+                <p:inputMask value="#{empresaAddEditMB.empresa.cnpj}" mask="99.999.999/9999-99" size="20" label="#{labels.empresa_cnpj}: " />
+                
+           </p:panelGrid>
+            
+            <p:panelGrid columns="8" style="width: 100%; margin-top: 20px;border: none;" columnClasses="rotulo, campo">
+            
+                <p:outputLabel value="#{labels.empresa_porte}: " />
+                <p:selectOneMenu value="#{empresaAddEditMB.empresa.porteEmpresa}" label="#{labels.empresa_porte}" >
+                    <f:selectItem itemLabel="Selecione" />
+                    <f:selectItems value="#{empresaAddEditMB.porteEmpresa}" var="PorteEmpresa"
+                                   itemValue="#{porteEmpresa}" itemLabel="#{PorteEmpresa.descricao}"/>
+                </p:selectOneMenu>
+               
+                <p:outputLabel value="#{labels.empresa_insMun}: " />
+                <p:inputText value="#{empresaAddEditMB.empresa.inscricaoMunicipal}"  size="15"/>
+ 
+                <p:outputLabel value="#{labels.empresa_insEst}: " />
+                <p:inputMask value="#{empresaAddEditMB.empresa.inscricaoEstadual}"  size="10" mask="99.999999-9" style="text-align: right"/>
+                
+                <p:outputLabel value="#{labels.empresa_abertura}: " />
+                <p:calendar value="#{empresaAddEditMB.empresa.dataAbertura}"  showOn="button" size="10" pattern="dd/MM/yyyy" required="true" label="#{labels.empresa_abertura}: "/>
+                
+            </p:panelGrid>
+  
+            <p:panelGrid columns="8" style="width: 100%; margin-top: 20px;border: none;" columnClasses="rotulo, campo">
+                
+                
+                <p:outputLabel value="#{labels.empresa_telefone}: " />
+                <p:inputMask value="#{empresaAddEditMB.empresa.telefone}" mask="(99)9999-9999" maxlength="11"  size="9" label="#{labels.empresa_telefone}: " />
+                
+                
+                <p:outputLabel value="#{labels.empresa_fax}: " />
+                <p:inputMask value="#{empresaAddEditMB.empresa.fax}"  mask="(99)9999-9999" maxlength="11" size="9"  label="#{labels.empresa_fax}: "/>
+
+                <p:outputLabel value="#{labels.empresa_ramoAtividade}: " />
+                <p:selectOneMenu value="#{empresaAddEditMB.empresa.ramoAtividade}" label="#{labels.empresa_ramoAtividade}">
+                    <f:selectItem itemLabel="Selecione" />
+                    <f:selectItems value="#{empresaAddEditMB.atividade}" var="RamoAtividade"
+                    itemValue="#{atividade}" itemLabel="#{RamoAtividade.descricao}"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="#{labels.empresa_qtdFunc}: " />
+                <p:inputText value="#{empresaAddEditMB.empresa.qtdFuncionarios}" size="6" required="true" style="text-align: right" label="#{labels.empresa_qtdFunc}: "/>
+                
+            </p:panelGrid>
+            
+            
+            <p:panelGrid columns="8" style="width: 100%; margin-top: 20px;border: none;" columnClasses="rotulo, campo">
+                <p:outputLabel value="#{labels.empresa_responsavel}: "  />
+                <p:inputText value="#{empresaAddEditMB.empresa.responsavel}" size="30" label="#{labels.empresa_responsavel}: "/>
+                
+                <p:outputLabel value="#{labels.empresa_cargo}: " />
+                <p:inputText value="#{empresaAddEditMB.empresa.cargo}" size="30" label="#{labels.empresa_cargo}: "/>
+               
+                <p:outputLabel value="#{labels.empresa_email}: " />
+                <p:inputText value="#{empresaAddEditMB.empresa.email}"  size="30" label="#{labels.empresa_email}: "/>
+                
+                
+                <p:outputLabel value="#{labels.empresa_foneResp}: " />
+                <p:inputMask value="#{empresaAddEditMB.empresa.telefoneResponsavel}"  mask="(99)99999-9999" size="10" style="text-align: right" label="#{labels.empresa_foneResp}: "/>
+ 
+            </p:panelGrid>
+            
+            <p:tabView  id="tabelaEnderecos" style="margin-top: 20px">
+                <p:tab title="#{labels.empresa_end}">
+                    <ui:include src="/pages/empresa/listEnd.xhtml" />
+                </p:tab>
+                <p:tab title="#{labels.empresa_observacao}">
+                    <p:inputTextarea value="#{empresaAddEditMB.empresa.observacao}" rows="10" style="width: 99%" />		
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+

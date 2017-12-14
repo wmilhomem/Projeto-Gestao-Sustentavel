@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+    version="2.1">
+
+        <application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+
+	<application>
+		<message-bundle>com.biosystemconsultoria.longevo.Messages</message-bundle>
+                <resource-bundle>
+			<base-name>resources.labels</base-name>
+			<var>labels</var>
+		</resource-bundle>
+		<locale-config>
+			<default-locale>pt</default-locale>
+                        <supported-locale>en</supported-locale>
+		</locale-config>
+	</application>
+        
+        <application>
+		<resource-bundle>
+			<base-name>resources.messages</base-name>
+			<var>messages</var>
+		</resource-bundle>
+	</application>
+
+	<factory>
+		<exception-handler-factory>
+			com.biosystemconsultoria.longevo.util.jsf.JsfExceptionHandlerFactory
+		</exception-handler-factory>
+	</factory>
+
+</faces-config>

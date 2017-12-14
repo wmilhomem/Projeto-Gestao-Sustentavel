@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+       <f:metadata>
+           <o:viewParam name="perfilacesso" value="#{perfilAcessoAddEditMB.perfilAcesso}" />
+    	</f:metadata>
+        
+        <h:form>
+            <p:growl id="growl" />
+            <p:focus for="nomeper" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/perfil.png');background-repeat: no-repeat;background-position: 750px 5px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                                                
+                    <p:commandButton value="#{labels.button_pesquisa}" immediate="true" ajax="false" icon="ui-icon-search"
+                                    action="/pages/perfilacesso/list.faces"  style="border-radius: 55px;margin-right: 43px" />
+
+                    <div style="margin-top: -25px;margin-left: 590px">
+                        <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.perfilacesso_title}</h1>
+                    </div>
+                    
+                    
+                </f:facet>
+                
+                <f:facet name="right" >
+                    <div style="position: fixed; top: 100px; right: 10px">
+                        <h:outputLink value="#{request.contextPath}/pages/aquisicao/listAddEdit.faces" title="#{labels.producao_title}">
+                            <h:graphicImage name="images/impressao.png" height="32" width="32" title="#{labels.button_imprimir}" style="border-radius: 55px;border: none !important;"/>
+                        </h:outputLink> 
+                    </div> 
+                    <p:commandButton value="#{labels.button_save}" ajax="fale" icon="ui-icon-check"
+                            action="/pages/perfilacesso/addEdit.faces"          
+                            actionListener="#{perfilAcessoAddEditMB.saveOrUpdate}" style="border-radius: 55px;" />
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_add}"  immediate="true" ajax="false" icon="ui-icon-circle-plus"
+                                             action="/pages/perfilacesso/addEdit.faces"  style="border-radius: 55px;margin-right: 43px"  
+                                             actionListener="#{perfilAcessoAddEditMB.add}"   />
+                </f:facet>                
+            </p:toolbar> 
+            <p:panelGrid columns="2" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+  
+                <p:outputLabel value="#{labels.perfilacesso_name}: " />
+                <p:inputText id="nomeper" label="#{labels.perfilacesso_name}" value="#{perfilAcessoAddEditMB.perfilAcesso.descricao}" size="50" />
+                
+                <p:outputLabel value="#{labels.perfilacesso_regra}" />
+                <p:selectOneMenu value="#{perfilAcessoAddEditMB.perfilAcesso.autorizacao}" label="#{labels.perfilacesso_regra}">
+                    <f:selectItem itemLabel="Selecione" />
+                    <f:selectItems value="#{perfilAcessoAddEditMB.autorizacao}" var="Autorizacao"
+                           itemValue="#{autorizacao}" itemLabel="#{Autorizacao.descricao}" />
+                </p:selectOneMenu>
+                <h:outputText value="#{labels.perfilacesso_log}" />
+                <h:outputText value="#{perfilAcessoAddEditMB.perfilAcesso.log}" style="font-style: italic;color: green;" />
+              
+                <h:outputText value="#{labels.perfilacesso_data}" />
+                <h:outputText value="#{perfilAcessoAddEditMB.perfilAcesso.dataCriacao}" style="font-style: italic;color: green;" >
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                </h:outputText>
+                
+             
+            </p:panelGrid>
+                
+        </h:form>
+    </ui:define>
+</ui:composition>

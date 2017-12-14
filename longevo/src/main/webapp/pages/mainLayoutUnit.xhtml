@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="tuto" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <f:view locale="#{configSettingsMB.localeCode}">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/main.css" />
+        <script type="text/javascript" src="#{request.contextPath}/resources/js/main.js" />
+        <title>BioSystem Consultoria</title>
+    </h:head>
+    
+    <h:body style="background-color: teal;">
+            
+        <p:layout fullPage="true" styleClass="layout-fundo">
+                
+                <p:layoutUnit position="center" >
+                    <ui:include src="header.xhtml" />
+                    <ui:include src="menu.xhtml"  />
+                    <ui:insert name="content" /> 
+                </p:layoutUnit>
+            
+                <p:layoutUnit position="south" size="26" style="border: none;" resizable="false" closable="false" collapsible="false">
+                   <ui:include src="footer.xhtml" />
+                </p:layoutUnit>
+            
+        </p:layout>
+    </h:body>
+    </f:view>
+</html>

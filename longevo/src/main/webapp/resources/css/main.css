@@ -1,0 +1,261 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 07/11/2014, 10:57:55
+    Author     : Wendell
+*/
+
+/*.ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd {
+	border: none;
+} */
+
+
+body {
+     	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0px;
+	font-weight: normal;
+}
+
+header {
+	padding: 5px 0px;
+	margin-bottom: 20px;
+	height: 30px;
+	background-color: #545454;
+	color: #fff;
+	box-shadow: 0px 2px 2px #ccc;
+        background-color: teal;
+}
+
+header > div {
+	margin-left: 8px
+}
+
+#conteudo {
+	padding: 0px 8px
+}
+
+footer {
+	padding: 0px 8px;
+	margin-bottom: 10px
+}
+
+
+#mainFooter {
+	font-family: Verdana,sans-serif;
+	color: grey;
+	font-size: 10px;
+	
+}
+
+#mainDivHeader {
+    background-color: teal;
+    border-color: teal;
+    margin-top: -2px;
+    margin-left: 0px;
+    height: 43px;
+    
+}
+
+
+h1 {
+	font-size: 24px;
+	font-weight: 500;
+	padding: 0px;
+	margin: 0px
+}
+
+#login-dialog {
+	width: 290px;
+	margin: auto;
+	margin-top: 150px;
+}
+
+
+.grid-fundo-borda {
+	background-color: #f2f2f2;
+	border-radius: 55px;
+	border: 1px solid #ccc;
+	margin-top: 0px;
+	padding: 20px;
+        alignment-adjust: central;
+}
+
+.panel-head-borda {
+	background-color: #f2f2f2;
+	border-radius: 55px;
+	border: 2px solid #ccc;
+	padding: 1px;
+}
+.layout-fundo {
+     background-color: teal;
+     border-color: teal;
+     width: 100%;
+     height: 100%;
+     padding : 4px;
+     margin-top: -3px;
+    
+}    
+.grid-login {
+	background-image: url('#{request.contextPath}/public/images/login_susten.jpg');
+        background-repeat: no-repeat; 
+	border-radius: 50px;
+	border: 1px solid #ccc;
+	margin-top: 8px;
+	padding: 10px
+}
+
+.titulo {
+    background-color: teal;
+    border-radius: 30px;
+    font-style: italic;
+    margin-top: -3px;
+}
+.rotulo {
+	width: 150px
+}
+
+/* Definição de estilos para linha de cabeçalho da tabela*/
+
+.cabecalho {
+
+   text-align: center;
+
+   font: 12px Arial, sans-serif;
+
+   font-weight: bold;
+
+   color: Snow;
+
+   background:  #008B45;
+   
+   background-color: darkblue;
+
+}
+
+ 
+
+/* Definição de estilos para coluna */
+
+.primeiro {
+
+   text-align: center;
+
+   font: 12px Arial, sans-serif;
+
+   background: #ffffff;
+   
+
+}
+
+ 
+
+/* Definição de estilos para coluna */
+
+.ultimo {
+
+   font: 12px Arial, sans-serif;
+
+   text-align: center;
+
+   background: #ffffff;
+
+}
+
+
+.razao-empresa input {
+	width: 99%;
+}
+
+.ui-dialog-footer.ui-widget-content  {
+     background-color: red;
+}
+
+
+.ui-widget-header {
+    border: none !important;
+    background-color:  #f2f2f2 !important;
+    height: 30px;
+}
+
+.ui-menubar { 
+    border: 0;
+    font-size: small;  
+    height: 30px !important;
+    border-radius: 5px;
+    margin-top: -4px;
+    margin-bottom: 20px
+}  
+
+
+.ui-panelgrid td {
+	height: 34px;
+        border: none !important;
+}
+
+.ajax-status {
+	position: fixed;
+	top: 8px;
+	right: 10px;
+        padding: 1px;
+}
+
+.ui-selectmanycheckbox td {
+	border-width: 0px !important;
+	padding: 0px !important;
+}
+
+.ui-selectmanycheckbox td label {
+	padding-right: 10px;
+}
+
+.produto-tabela input {
+	width: 99%;
+}
+
+/* Customiza TabView - início */
+.ui-tabs .ui-tabs-panel {
+    padding: 0.5em 0.2em !important;
+}
+
+.ui-tabs {
+    padding: 0px !important;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: -1px !important;
+}
+
+.ui-tabs.ui-tabs-top > .ui-tabs-nav {
+    padding: 0px !important;
+}
+/* Customiza TabView - fim */
+
+/* Menu sistema inicio */
+.menu-sistema {
+    border: 0px !important;
+    padding: 0px !important;
+    background: none !important;
+}
+
+.menu-sistema .ui-menu-parent > a .ui-menuitem-text, .menu-sistema > .ui-menu-list > .ui-menuitem > a > .ui-menuitem-text {
+    color: #ffffff !important;
+}
+
+.menu-sistema .ui-icon-triangle-1-s {
+    background: url(#{resource['images:seta-para-baixo.png']}) no-repeat;
+}
+
+.figuras {
+  background-repeat: no-repeat;
+  display: block;
+  width: 305px;
+  height: 180px;
+  border-radius: 2px 2px 0px 0px;
+  position: relative;
+  text-align: center;    
+}
+

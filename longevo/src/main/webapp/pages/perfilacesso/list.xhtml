@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+    <ui:define name="content">
+            <h:form id="perfilAcessoForm"  >
+                
+                <p:growl id="growl" autoUpdate="true" />   
+               	
+	    	<p:toolbar style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/perfil.png');background-repeat: no-repeat;background-position: 750px 5px;;background-size: 2%;" >
+                    <f:facet name="left">
+                        <p:commandButton value="#{labels.button_consulta}" icon="ui-icon-search" style="border-radius: 55px;"
+                                         actionListener="#{perfilacessoMB.pesquisar}" update="perfilAcessoDataTable"   />
+                        <p:spacer width="3"/>
+                        <p:commandButton value="#{labels.button_add}" icon="ui-icon-circle-plus" style="border-radius: 55px;"
+                                    action="/pages/perfilacesso/addEdit.faces" ajax="false" />
+                        
+                          
+                        <div id="id-impres" style="margin-top: -25px;margin-left: 590px;" >
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">#{labels.perfilacesso_title}</h1>    
+                        </div>
+                    </f:facet>                    
+	    	</p:toolbar>
+                
+                <h:panelGrid columns="2"  style="font-size: 12px;width: 100%;margin-top: 20px"  styleClass="grid-fundo-borda">
+                    <p:inputText value="#{perfilacessoMB.filtro}" placeholder="encontrar perfil acesso..." size="80" />
+                </h:panelGrid>    
+                
+                <p:dataTable id="perfilAcessoDataTable"   value="#{perfilacessoMB.perfilacessos}" style="width: 100%;margin-top: 20px" 
+                    widgetVar="dataTable" var="perfilAcesso" paginatorPosition="top"
+                    emptyMessage="#{labels.perfilacesso_load}"
+                    paginator="true" rows="5" 
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                                        {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="5,10,20">
+       
+                    <p:column style="overflow: hidden">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.perfilacesso_id}" />
+                        </f:facet>
+                        <h:outputText value="#{perfilAcesso.id}" />
+                    </p:column>
+
+                    <p:column sortBy="#{perfilAcesso.nome}">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.perfilacesso_name}" />
+                        </f:facet>
+                        <h:outputText value="#{perfilAcesso.descricao}" />
+                    </p:column>
+
+                    
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.perfilacesso_regra}" />
+                        </f:facet>
+                        <h:outputText value="#{perfilAcesso.autorizacao.descricao}" />
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.menu_dataset}" />
+                        </f:facet>
+                        <p:button outcome="/pages/perfilacesso/addEdit.faces" style="border-radius: 55px;" icon="ui-icon-pencil" title="#{labels.button_update}">
+                            <f:param name="perfilacesso" value="#{perfilAcesso.id}" />
+	    		</p:button>
+                        
+                        <p:commandButton icon="ui-icon-trash" process="@this" update="perfilAcessoDataTable"
+                                         action="#{perfilacessoMB.delete(perfilAcesso)}">
+                            <p:confirm icon="ui-icon-alert" header="#{labels.dialog_confirmacao}" 
+                                       message="#{labels.dialog_exclusao}" />
+	    		</p:commandButton>
+                        
+                    </p:column>
+                    
+                </p:dataTable>
+                
+            </h:form>
+    </ui:define>
+</ui:composition>

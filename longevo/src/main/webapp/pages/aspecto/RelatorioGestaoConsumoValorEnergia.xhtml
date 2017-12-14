@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
+
+   
+    <ui:define name="content">
+         <h:form id="consumoValorEnergiaForm"> 
+             
+            <p:growl id="growl" autoUpdate="true" />
+            <p:toolbar  style="border-radius: 10px;margin-top: 3px;background-image:  url('#{request.contextPath}/public/images/energia.png');background-repeat: no-repeat;background-position: 850px 5px;;background-size: 2%;">
+                     
+                <f:facet name="left">
+                    <p:commandButton value="#{labels.button_cancel}" action="/pages/aspecto/listAddEditConsumoEnergia.faces" icon="ui-icon-cancel" style="border-radius: 55px;" 
+                                   ajax="false"      immediate="true"/>
+                    <p:spacer width="3"/>
+                    <p:commandButton value="#{labels.button_imprimir}"  ajax="false" icon="ui-icon-print"
+                               action="#{consumoAguaEnergiaRelatorioMB.emitir}" style="border-radius: 55px"  />
+                      
+                  
+                    
+                        <div style="margin-top: -25px;position: relative; left: 540px">
+                            <h1 align="center" style="border-radius: 30px;font-style: italic;color: teal">Relatório Gestão de Energia</h1>
+                        </div>
+                     
+                </f:facet>
+            </p:toolbar>                             
+                
+            <p:panelGrid columns="4" id="painel" style="margin-top: 20px;margin-left: 30px">
+                    
+                <h:outputText value="#{labels.consumoAguaEnergia_ano}"/>
+                <p:spinner id="anobase" label="#{labels.consumoAguaEnergia_ano}" value="#{consumoAguaEnergiaRelatorioMB.anoBase}" required="true" min="2013" max="2030" size="2"/>
+                <p:commandButton value="#{labels.button_confirma}"  ajax="false" icon="ui-icon-play"
+                                     action="#{consumoAguaEnergiaRelatorioMB.processar}" style="border-radius: 55px"  />
+            </p:panelGrid>
+            
+            <br/>
+            <p:panel style="background-color: #E8E8E8 ;width: 800px; margin: auto;font-size: 11px;font-family: Helvetica, Verdana, sans-serif;color:  #000;" rendered="#{consumoAguaEnergiaRelatorioMB.dadosConsumosGeraisAnoBase.iterator().hasNext()}">
+                <p/>
+                <h3>
+                    &nbsp;&nbsp;&nbsp;&nbsp; Os dados correspondentes ao consumo da energia, em quilowatt-hora (kWh), foram obtidos
+                    através das contas de energia. O <h:outputText value="#{configSettingsMB.userEmpresa.razaoSocial}" style="color:navy;bold"/> , No que se refere
+                    sede e demais dependências, apresenta no total <h:outputText value="#{consumoAguaEnergiaRelatorioMB.dadosLocalidadeGrupo.size()}"/> unidades consumidoras conforme tabela 7:
+                    <p/>
+                    <p/>
+                    <p/>
+                    <p/>
+                    <br/>
+                     &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                     Tabela 7-<h:outputText value="#{labels.consumoAguaEnergia_grupo_tarifario}" /> das unidades consumidoras sede e demais dependências
+                </h3>
+            
+            <p:dataTable var="dadosConsumoEnergia" value="#{consumoAguaEnergiaRelatorioMB.dadosLocalidadeGrupo}" style="margin: auto" styleClass="tabela">
+                <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.empresa_local}" />
+                        </f:facet>  
+                    <h:outputText value="#{dadosConsumoEnergia[3]}, #{dadosConsumoEnergia[4]}" />
+                </p:column>
+                <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_consumidora}" />
+                        </f:facet>
+                        <h:outputText value="#{dadosConsumoEnergia[0]}"/>
+                </p:column>
+                <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_grupo_tarifario}" />
+                        </f:facet>
+                        <h:outputText value="#{dadosConsumoEnergia[1]} Grupo #{dadosConsumoEnergia[2]}" />
+                </p:column>
+            </p:dataTable>
+               
+               <h3>
+                   A análise da gestão da energia, apresentada neste relatório, demonstra um cenário intuitivo com
+                   objetivo de analisar o consumo, correspondente às <h:outputText value="#{consumoAguaEnergiaRelatorioMB.dadosLocalidadeGrupo.size()}" style="color:navy;bold"/> unidades citadas, que compreendem os
+                   locais de maior produção de materiais para cursos e eventos, e onde acontece a grande maioria
+                   dos processos e procedimentos administrativos e financeiros da instituição, sendo
+                   representativos em relação ao consumo total.
+                   <p/>
+                   consumo de energia no ano de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/>, das <h:outputText value="#{consumoAguaEnergiaRelatorioMB.dadosLocalidadeGrupo.size()}" style="color:navy;bold"/> unidades consumidoras, correspondeu a <h:outputText value="#{consumoAguaEnergiaRelatorioMB.totalGeralConsumoAnoBase}" style="color:navy;bold"/>, para
+                   o mesmo período em <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/> o consumo foi de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.totalGeralConsumoAnoAnterior}" style="color:navy;bold"/>, o que corresponderia a uma redução de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.totalGeralConsumoDiferencaPorcentagem}" style="color:navy;bold"/>% (Tabela 8).
+               </h3>
+                  
+            
+                <p:spacer width="10"/>
+                <h3>
+                <b>Tabela 8-</b>Consumo de energia elétrica da Sede e demais dependências no ano de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/> e <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/>, 
+                </h3>    
+             
+                <p:dataTable var="linha" value="#{consumoAguaEnergiaRelatorioMB.dadosConsumosGeraisAnoAnterior}">  
+                    
+                    <p:columns value="#{consumoAguaEnergiaRelatorioMB.columns}" var="column" columnIndexVar="colIndex" style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}" style="text-align: center" />
+                        </f:facet>
+                        <h:outputText value="#{linha[column.property]}" />
+                    </p:columns>
+                </p:dataTable>
+
+
+                <p:dataTable var="linha" value="#{consumoAguaEnergiaRelatorioMB.dadosConsumosGeraisAnoBase}" >  
+                    
+                    <p:columns value="#{consumoAguaEnergiaRelatorioMB.columns}" var="column" columnIndexVar="colIndex" style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}" style="text-align: center" />
+                        </f:facet>
+                        <h:outputText value="#{linha[column.property]}" />
+                    </p:columns>
+                </p:dataTable>
+               
+                <h3>
+                    Levando em consideração que cerca de 50% do consumo de energia representa a utilização de
+                    equipamentos para a climatização, um fator importante que influência no consumo, e que será
+                    abordado, são as temperaturas médias mensais, que precisam ser aferidas em busca de
+                    correlação e modelo equacional.
+                <p/>
+                    Tendo como base os dados obtidos através do Banco de Dados Meteorológicos para Ensino e
+                    Pesquisa <a href="http://www.inmet.gov.br/projetos/rede/pesquisa/" target="_">(BDMEP)</a> , e na base do <a href="http://www.inmet.gov.br/sim/sonabra/dspDadosCodigo.php?ODIzMzE="
+                    target="_">INMETRO</a>  as variações de temperaturas médias,  mínimas e máximas, em Manaus, são apresentadas na Tabela 9.
+                <p/>
+                    No relatório de gestão de aspectos em <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/>, foi feito uma regressão onde o modelo equacional
+                    explicou que 40,6% das variações no consumo de energia são explicadas pela regressão, ou seja,
+                    influenciado pela variável temperatura. 
+                <p/>
+                É possível observa-se pouca variação  entre as temperaturas em <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/> quando comparado a <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/>.
+
+                </h3>
+          
+            
+            </p:panel> 
+            <p:spacer width="15"/>
+            <p:panel style="background-color: #E8E8E8 ;width: 800px; margin: auto;font-size: 11px;font-family: Helvetica, Verdana, sans-serif;color:  #000;" rendered="#{consumoAguaEnergiaRelatorioMB.dadosConsumosGeraisAnoBase.iterator().hasNext()}">
+                <p:spacer width="10"/>
+                <h3>
+                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                    Tabela 9- Temperaturas médias, máxima e mínima, em <h:outputText value="#{consumoAguaEnergiaRelatorioMB.cidadeMatriz}" style="color:navy;bold"/> no ano de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/> e <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/>.
+                </h3>
+                
+               <p:dataTable var="dadosTemperatura" value="#{consumoAguaEnergiaRelatorioMB.dadosTemperaturaLocalAnoAnterior}" style="margin: auto" styleClass="tabela">
+               
+                  <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_estacao}" />
+                        </f:facet>  
+                      <h:outputText value="#{dadosTemperatura.estacao}" />
+                </p:column>
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_mes}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.mes}(#{dadosTemperatura.ano})" />
+                </p:column>
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_maxima}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.maxima} ºC"/>
+                </p:column>
+                   
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_minima}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.minima} ºC"/>
+                </p:column>  
+                  <p:columnGroup type="footer">
+                            <p:row>
+                                 <p:column footerText="#{dadosTemperatura.estacao}"/>
+                                <p:column style="text-align:center">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{labels.temperatura_media}" />
+                                    </f:facet>
+                                </p:column>                                
+                                <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaMediaMaximaAnoAnterior} ºC"/>
+                                <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaMediaMinimaAnoAnterior} ºC"/>
+                            </p:row>
+                   </p:columnGroup>   
+               </p:dataTable> 
+                
+           <p:dataTable var="dadosTemperatura" value="#{consumoAguaEnergiaRelatorioMB.dadosTemperaturaLocalAnoBase}" style="margin: auto" styleClass="tabela">
+               
+                  <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_estacao}" />
+                        </f:facet>  
+                      <h:outputText value="#{dadosTemperatura.estacao}" />
+                </p:column>
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.consumoAguaEnergia_mes}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.mes}(#{dadosTemperatura.ano})" />
+                </p:column>
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_maxima}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.maxima} ºC"/>
+                </p:column>
+                   
+                <p:column style="text-align: center" >
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.temperatura_minima}" />
+                        </f:facet>
+                    <h:outputText value="#{dadosTemperatura.minima} ºC"/>
+                </p:column>  
+
+                   <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column footerText="#{dadosTemperatura.estacao}"/>
+                                <p:column style="text-align:center">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{labels.temperatura_media}" />
+                                    </f:facet>
+                                </p:column>                                
+                                <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaMediaMaximaAnoBase} ºC"/>
+                                <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaMediaMinimaAnoBase} ºC"/>
+                            </p:row>
+                       
+                            <p:row>
+                                <p:column footerText="#{dadosTemperatura.estacao}"/>
+                               <p:column footerText="#{labels.button_diferenca} %"/>
+                               <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaDiferencaMaxima} %"/>
+                               <p:column footerText="#{consumoAguaEnergiaRelatorioMB.temperaturaDiferencaMinima} %"/>
+                            </p:row>
+                   </p:columnGroup>   
+
+               </p:dataTable> 
+                
+                <h3>
+                    <b>Impacto econômico do consumo de energia</b><p/>
+
+                    <p:spacer  width="5"/> O impacto econômico do consumo de energia no ano de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/>, considerando  <h:outputText value="#{consumoAguaEnergiaRelatorioMB.mes[1]}" style="color:navy;bold"/> a <h:outputText value="#{consumoAguaEnergiaRelatorioMB.mesBase}" style="color:navy;bold"/>, 
+                     foi de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.totalGeralValorFormatado}" style="color:navy;bold"/> e a média mensal de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.totalMediaValorMensal}" style="color:navy;bold"/> (Tabela  10).  
+                     <p/>
+                     <p/>
+                     <p:spacer width="30"/>
+                     &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                     Tabela 10- Impacto econômico do consumo de energia no ano de <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoAnterior}" style="color:navy;bold"/> e  <h:outputText value="#{consumoAguaEnergiaRelatorioMB.anoBase}" style="color:navy;bold"/>
+                </h3>
+                <p:dataTable var="linha" value="#{consumoAguaEnergiaRelatorioMB.dadosValoresGeraisAnoAnterior}" >  
+                    
+                    <p:columns value="#{consumoAguaEnergiaRelatorioMB.columns}" var="column" columnIndexVar="colIndex" style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}" style="text-align: center" />
+                        </f:facet>
+                        <h:outputText value="#{linha[column.property]}" />
+                    </p:columns>
+                </p:dataTable>
+                
+                  <p:dataTable var="linha" value="#{consumoAguaEnergiaRelatorioMB.dadosValoresGeraisAnoBase}" >  
+                    
+                    <p:columns value="#{consumoAguaEnergiaRelatorioMB.columns}" var="column" columnIndexVar="colIndex" style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{column.header}" style="text-align: center" />
+                        </f:facet>
+                        <h:outputText value="#{linha[column.property]}" />
+                    </p:columns>
+                </p:dataTable>
+            </p:panel>
+          </h:form>    
+    </ui:define>
+    
+</ui:composition>    
