@@ -387,7 +387,6 @@ public class ConsumoAguaEnergiaLancamentoMB implements Serializable{
     }
     
     public void editaConsumoDesc() {
-         System.out.println(this.selectedAspecto.getDescricao());
         this.tipoConsumoDesc = this.selectedAspecto.getDescricao();
     }
 

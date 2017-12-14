@@ -520,31 +520,7 @@ public class ProducaoRelatorioExecucaoInstrumentoMB  implements Serializable  {
     } 
     
     public void montarRelatorioTexto() throws IOException{
-        //   FacesContext facesContext = FacesContext.getCurrentInstance();
-        //  System.out.println( facesContext.getExternalContext().getRequestContentType());
-        //  System.out.println( facesContext.getPartialViewContext().getPartialResponseWriter().getWrapped().getContentType());
-        // System.out.println(this.response.getOutputStream().toString() );
-        //  System.out.println( facesContext.getExternalContext().getFlash().toString());
-        //System.out.println( facesContext.getExternalContext().getRequestContentType());
-        //Object obj = facesContext.getViewRoot();
-        //setText(facesContext.getViewRoot().toString());
-// Escreve o html da página no console, porém, você pode fazer o que quiser o resultado.
-//setText(codigoHtml);
-        //UIViewRoot view =facesContext.getViewRoot();
-        //FacesContext fc = FacesContext.getCurrentInstance();
-        //UIViewRoot uiViewRoot = facesContext.getViewRoot();
-        //HtmlInputText inputText = (HtmlInputText) uiViewRoot.findComponent("producaoForm:relatorioExecucaoPanel");
-   //  System.out.println(facesContext.getExternalContext().getRealPath("")+facesContext.getViewRoot().getViewId());
-     File input = new File(facesContext.getExternalContext().getRealPath("")+facesContext.getViewRoot().getViewId());
-     Document doc = Jsoup.connect("http://localhost:8080/Longevo/pages/producao/relatorioExecucaoInstrumento.faces").get();
-        Elements html = doc.select("table");
-    
-    setText(html.html());
-    
-
-        
-      
-  //  }
+        //
     }
    
  
