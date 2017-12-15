@@ -1,0 +1,368 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `longevo` DEFAULT CHARACTER SET latin1 ;
+USE `longevo` ;
+
+-- -----------------------------------------------------
+-- Table `longevo`.`empresa`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`empresa` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `razaoSocial` VARCHAR(100) NOT NULL ,
+  `cnpj` VARCHAR(14) NOT NULL ,
+  `inscricaoMunicipal` VARCHAR(20) NULL DEFAULT NULL ,
+  `inscricaoEstadual` VARCHAR(20) NULL DEFAULT NULL ,
+  `porteEmpresa` VARCHAR(3) NOT NULL ,
+  `telefone` VARCHAR(11) NOT NULL ,
+  `fax` VARCHAR(11) NULL DEFAULT NULL ,
+  `ramoAtividade` VARCHAR(30) NOT NULL ,
+  `dataAbertura` DATE NOT NULL ,
+  `qtdfuncionarios` INT(10) NOT NULL ,
+  `responsavel` VARCHAR(50) NOT NULL ,
+  `cargo` VARCHAR(30) NOT NULL ,
+  `email` VARCHAR(100) NOT NULL ,
+  `telefoneResponsavel` VARCHAR(11) NOT NULL ,
+  `observacao` TEXT NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 24
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `EMPRESA_CNPJ` ON `longevo`.`empresa` (`cnpj` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`aquisicao`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`aquisicao` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `documentoref` VARCHAR(100) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  `descricao` VARCHAR(100) NOT NULL ,
+  `unidade` VARCHAR(3) NOT NULL ,
+  `quantidade` DECIMAL(10,2) NOT NULL ,
+  `valorUnitario` DECIMAL(10,2) NOT NULL ,
+  `total` DECIMAL(10,2) NOT NULL ,
+  `mes` INT(2) NOT NULL ,
+  `ano` INT(4) NOT NULL ,
+  `observacao` TEXT NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `AQUISICAO_EMPRESA_fk1`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 25
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `DOCUMENTOREF_UK` ON `longevo`.`aquisicao` (`documentoref` ASC) ;
+
+CREATE INDEX `AQUISICAO_EMPRESA_fk1` ON `longevo`.`aquisicao` (`empresaId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`bairro`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`bairro` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `origem` VARCHAR(255) NULL DEFAULT NULL ,
+  `km` VARCHAR(100) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 110
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`cidade`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`cidade` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `codigo` VARCHAR(255) NULL DEFAULT NULL ,
+  `nome` VARCHAR(100) NULL DEFAULT NULL ,
+  `data` VARCHAR(100) NULL DEFAULT NULL ,
+  `transporte` VARCHAR(100) NULL DEFAULT NULL ,
+  `bairro` VARCHAR(100) NULL DEFAULT NULL ,
+  `cidade` VARCHAR(100) NULL DEFAULT NULL ,
+  `chegada` VARCHAR(100) NULL DEFAULT NULL ,
+  `destino` VARCHAR(100) NULL DEFAULT NULL ,
+  `saida` VARCHAR(100) NULL DEFAULT NULL ,
+  `trecho` VARCHAR(100) NULL DEFAULT NULL ,
+  `km` VARCHAR(100) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 1068
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`consumoaguaenergia`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`consumoaguaenergia` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `documentoref` VARCHAR(100) NOT NULL ,
+  `descricao` VARCHAR(100) NOT NULL ,
+  `unidade` VARCHAR(3) NOT NULL ,
+  `quantidadeConsumida` DECIMAL(10,2) NOT NULL ,
+  `mes` INT(2) NOT NULL ,
+  `ano` INT(4) NOT NULL ,
+  `unidadeConsumidora` INT(11) NULL DEFAULT NULL ,
+  `numeroEnderecoId` INT(11) NULL DEFAULT NULL ,
+  `aspectoTipo` VARCHAR(15) NOT NULL ,
+  `consumoTipo` VARCHAR(15) NOT NULL ,
+  `etapa` VARCHAR(30) NULL DEFAULT NULL ,
+  `grupoCliente` VARCHAR(1) NULL DEFAULT NULL ,
+  `grupoTarifario` VARCHAR(20) NULL DEFAULT NULL ,
+  `taxaAdicional` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `demandaContratada` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `manutencao` VARCHAR(10) NULL DEFAULT NULL ,
+  `dataManutencao` DATETIME NULL DEFAULT NULL ,
+  `valorUnitario` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `total` DECIMAL(10,2) NOT NULL ,
+  `observacao` TEXT NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `CONSUMO_AGUAENERGIA_EMPRESA_fk1`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 58
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `DOCUMENTOREF_UK` ON `longevo`.`consumoaguaenergia` (`documentoref` ASC, `descricao` ASC) ;
+
+CREATE INDEX `CONSUMO_AGUAENERGIA_EMPRESA_fk1` ON `longevo`.`consumoaguaenergia` (`empresaId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`dadostemperatura`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`dadostemperatura` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `maxima` DECIMAL(4,2) NOT NULL ,
+  `minima` DECIMAL(4,2) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 30
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`endereco`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`endereco` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `logradouro` VARCHAR(150) NOT NULL ,
+  `numero` VARCHAR(20) NOT NULL ,
+  `complemento` VARCHAR(150) NULL DEFAULT NULL ,
+  `bairro` VARCHAR(50) NOT NULL ,
+  `cidade` VARCHAR(50) NOT NULL ,
+  `uf` VARCHAR(2) NOT NULL ,
+  `pais` VARCHAR(50) NOT NULL ,
+  `cep` VARCHAR(8) NOT NULL ,
+  `matrizfilial` VARCHAR(1) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `ENDERECO_EMPRESA_fk1`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 34
+DEFAULT CHARACTER SET = latin1;
+
+CREATE INDEX `ENDERECO_EMPRESA_fk1` ON `longevo`.`endereco` (`empresaId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`geracaoresiduo`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`geracaoresiduo` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `documentoref` VARCHAR(100) NOT NULL ,
+  `descricao` VARCHAR(100) NOT NULL ,
+  `unidade` VARCHAR(3) NOT NULL ,
+  `quantidade` DECIMAL(10,2) NOT NULL ,
+  `mes` INT(2) NOT NULL ,
+  `ano` INT(4) NOT NULL ,
+  `aspectoTipo` VARCHAR(15) NOT NULL ,
+  `residuoTipo` VARCHAR(15) NOT NULL ,
+  `etapa` VARCHAR(30) NULL DEFAULT NULL ,
+  `destinoEfluente` VARCHAR(30) NULL DEFAULT NULL ,
+  `destinoResiduo` VARCHAR(20) NULL DEFAULT NULL ,
+  `controleEmissao` VARCHAR(1) NULL DEFAULT NULL ,
+  `medicao` INT(11) NULL DEFAULT NULL ,
+  `dataPesagem` DATE NULL DEFAULT NULL ,
+  `composicao` VARCHAR(20) NULL DEFAULT NULL ,
+  `custoDestino` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `total` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `observacao` TEXT NULL DEFAULT NULL ,
+  `departamento` VARCHAR(30) NULL DEFAULT NULL ,
+  `tipoPapel` VARCHAR(20) NULL DEFAULT NULL ,
+  `copiaImpressao` VARCHAR(1) NULL DEFAULT NULL ,
+  `cotaExtra` VARCHAR(1) NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `GERACAORESIDUO_EMPRESA_fk1`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `GERACAORESIDUO_DOCUMENTOREF_UK` ON `longevo`.`geracaoresiduo` (`documentoref` ASC, `descricao` ASC) ;
+
+CREATE INDEX `GERACAORESIDUO_EMPRESA_fk1` ON `longevo`.`geracaoresiduo` (`empresaId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`impressao`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`impressao` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `departamento` VARCHAR(255) NOT NULL ,
+  `requisicao` VARCHAR(100) NOT NULL ,
+  `servicos` VARCHAR(100) NOT NULL ,
+  `qtde` INT(11) NOT NULL ,
+  `data` DATE NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 692
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`perfilacesso`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`perfilacesso` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `descricao` VARCHAR(100) NOT NULL ,
+  `role` VARCHAR(20) NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 7
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `DESCRICAO_PERFIL` ON `longevo`.`perfilacesso` (`descricao` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`producaoexecucao`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`producaoexecucao` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `documentoref` VARCHAR(100) NOT NULL ,
+  `descricao` VARCHAR(100) NOT NULL ,
+  `unidade` VARCHAR(3) NOT NULL ,
+  `quantidadeRealizada` DECIMAL(10,2) NOT NULL ,
+  `quantidadePrevista` DECIMAL(10,2) NOT NULL ,
+  `mes` INT(2) NOT NULL ,
+  `ano` INT(4) NOT NULL ,
+  `participantes` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `quantidadeHoras` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `quantidadePrevistaHoras` DECIMAL(10,2) NULL DEFAULT NULL ,
+  `observacao` TEXT NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `PRODUCAO_EMPRESA_fk1`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 82
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `DOCUMENTOREF_UK` ON `longevo`.`producaoexecucao` (`documentoref` ASC, `descricao` ASC) ;
+
+CREATE INDEX `PRODUCAO_EMPRESA_fk1` ON `longevo`.`producaoexecucao` (`empresaId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`temperatura`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`temperatura` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `estacao` INT(11) NOT NULL ,
+  `mes` INT(2) NOT NULL ,
+  `ano` INT(4) NOT NULL ,
+  `data` DATE NOT NULL ,
+  `maxima` DECIMAL(4,2) NOT NULL ,
+  `minima` DECIMAL(4,2) NOT NULL ,
+  `media` DECIMAL(4,2) NOT NULL ,
+  `enderecoId` INT(11) NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `TEMPERATURA_ENDERECO_fk1`
+    FOREIGN KEY (`enderecoId` )
+    REFERENCES `longevo`.`endereco` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 23
+DEFAULT CHARACTER SET = latin1;
+
+CREATE INDEX `TEMPERATURA_ENDERECO_fk1` ON `longevo`.`temperatura` (`enderecoId` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `longevo`.`usuario`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `longevo`.`usuario` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `nome` VARCHAR(100) NOT NULL ,
+  `username` VARCHAR(50) NOT NULL ,
+  `senha` VARCHAR(255) NOT NULL ,
+  `perfilacessoId` INT(11) NOT NULL ,
+  `email` VARCHAR(100) NULL DEFAULT NULL ,
+  `dataCriacao` DATETIME NOT NULL ,
+  `dataAlteracao` DATETIME NOT NULL ,
+  `log` VARCHAR(25) NOT NULL ,
+  `empresaId` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `usuario_fk1`
+    FOREIGN KEY (`perfilacessoId` )
+    REFERENCES `longevo`.`perfilacesso` (`id` )
+    ON DELETE CASCADE,
+  CONSTRAINT `usuario_fk2`
+    FOREIGN KEY (`empresaId` )
+    REFERENCES `longevo`.`empresa` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 88
+DEFAULT CHARACTER SET = latin1;
+
+CREATE UNIQUE INDEX `usuario_username` ON `longevo`.`usuario` (`username` ASC) ;
+
+CREATE INDEX `usuario_fk1` ON `longevo`.`usuario` (`perfilacessoId` ASC) ;
+
+CREATE INDEX `usuario_fk2_idx` ON `longevo`.`usuario` (`empresaId` ASC) ;
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
