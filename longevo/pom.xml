@@ -20,7 +20,7 @@
             <scope>compile</scope>
 	</dependency>
     
-	<!-- NÃºcleo do Hibernate -->
+	<!-- Nucleo do Hibernate -->
 	<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -28,7 +28,7 @@
             <scope>compile</scope>
 	</dependency>
 		
-	<!-- ImplementaÃ§Ã£o de EntityManager da JPA -->
+	<!-- Implementacao de EntityManager da JPA -->
 	<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -60,7 +60,7 @@
             <scope>compile</scope>
 	</dependency> -->
     
-	        <!-- Weld (implementaÃ§Ã£o do CDI) -->
+	        <!-- Weld (implementacao do CDI) -->
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
@@ -106,7 +106,7 @@
             <scope>compile</scope>
 	</dependency>
 		
-	<!-- Commons Logging (abstrai a implementaÃ§Ã£o de logging) -->
+	<!-- Commons Logging (abstrai a implementacao de logging) -->
 	<dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -145,7 +145,7 @@
             <scope>compile</scope>
 	</dependency>
 		
-	<!-- Usamos para formatar nÃºmeros em templates -->
+	<!-- Usamos para formatar numeros em templates -->
 	<dependency>
             <groupId>velocity-tools</groupId>
             <artifactId>velocity-tools-generic</artifactId>
@@ -153,7 +153,7 @@
             <scope>compile</scope>
 	</dependency>
         
-    <!-- Spring Security (autenticaÃ§Ã£o e autorizaÃ§Ã£o) -->
+    <!-- Spring Security (autenticacao e autorizacao) -->
 	<dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
