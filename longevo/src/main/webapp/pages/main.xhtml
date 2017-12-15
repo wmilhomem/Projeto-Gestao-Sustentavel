@@ -17,7 +17,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/main.css" />
         <script type="text/javascript" src="#{request.contextPath}/resources/js/main.js" />
-        <title>BioSystem Consultoria</title>
+        <title>Biosystem Consultoria</title>
     </h:head>
     
     <h:body>
@@ -27,13 +27,13 @@
                     <h:graphicImage name="images/logo1.png" width="117" height="23"  style="margin-top: 2px;margin-left: 2px;border-radius: 55px;opacity: .4;border: none !important;"/>
                     <h:outputLabel value=" ${messages.application_name}" style="color: green;font-style: italic;margin-right: 20px"/>
                     <p:spacer />
-                    <h:outputLabel value="#{labels.user_username} : " style="color: #545454;font-weight: bold;"/><h:outputLabel value="(#{configSettingsMB.logado.username})" style="color: green;font-style: italic;"/>
+                    <h:graphicImage name="images/user_login.png" width="24" height="24"  style="margin-top: 2px;margin-left: 2px;border: none !important;"/>
+                    <h:outputLabel value="(#{configSettingsMB.logado.username})" style="color: green;font-style: italic;"/>
                     <p:spacer />
-                    <h:outputLabel value="#{labels.empresa_inicio} : " style="color: #545454;font-weight: bold;"/><h:outputLabel value="(#{configSettingsMB.userEmpresa.razaoSocial})" style="color: green;font-style: italic;"/>
-                    <h:outputText value="#{labels.language_dia} : "  style="color: seagreen;font-weight: bold;" />
-                    <h:outputText value="#{now}" style="color: green">
-                        <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
-                    </h:outputText>
+                    <h:graphicImage name="images/empresa.png" width="20" height="20"  style="margin-top: 2px;margin-left: 2px;border: none !important;"/>
+                    <h:outputLabel value="(#{configSettingsMB.userEmpresa.razaoSocial})" style="color: green;font-style: italic;"/>
+                    <h:graphicImage name="images/calendario.jpg" width="24" height="24"  style="margin-top: 2px;margin-left: 2px;border: none !important;"/>
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss" class="label" />
                 
                     <p:ajaxStatus styleClass="ajax-status">             
                         <f:facet name="start">

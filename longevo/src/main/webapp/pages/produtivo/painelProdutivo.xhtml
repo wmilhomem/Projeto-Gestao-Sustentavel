@@ -8,27 +8,26 @@
     xmlns:p="http://primefaces.org/ui" template="../main.xhtml">
 
     <ui:define name="content">
-        <h1 align="center" style="background-color: #f2f2f2;border-radius: 30px;font-style: italic;margin-top: 5px;color: teal">#{labels.processo_title}</h1>
         <p:panel id="painelProdutivoPanel" style="border: none; margin-top: 20px;">
             <h:form>
                 <h:panelGrid columns="3"  style="max-width: 500px; min-width: 700px;font-size: 12px;margin-left: 340px" styleClass="grid-fundo-borda" >
                     
                   
                     <h:outputLink value="#{request.contextPath}/pages/aquisicao/listAddEdit.faces" >
-                        <h:graphicImage name="images/aquisicoes.png" height="115" width="110" title="#{labels.processo_entrada}" style="margin-left: 58px;border-radius: 85px;border: none !important;"/>
+                        <h:graphicImage name="images/aquisicoes.png" height="115" width="110" title="#{labels.processo_entrada}" style="margin-left: 38px;border-radius: 85px;border: none !important;"/>
                     </h:outputLink>
                   
                     <h:outputLink value="#{request.contextPath}/pages/producao/listAddEdit.faces" >
-                        <h:graphicImage name="images/produces.png" height="115" width="110" title="#{labels.processo_producao}" style="margin-left: 18px;border-radius: 25px;border: none !important;"/>
+                        <h:graphicImage name="images/produces.png" height="115" width="110" title="#{labels.processo_producao}" style="margin-left: 8px;border-radius: 25px;border: none !important;"/>
                     </h:outputLink>
                     
                     <h:outputLink >
-                        <h:graphicImage name="images/aspectos.png" height="115" width="110" title="#{labels.processo_saida}" style="margin-left: 10px;border-radius: 25px;border: none !important;"/>
+                        <h:graphicImage name="images/aspectos.png" height="115" width="110" title="#{labels.processo_saida}" style="border-radius: 25px;border: none !important;"/>
                     </h:outputLink>
                     
-                    <p:commandButton value="#{labels.processo_entrada}"  style="margin-left: 38px;border-radius: 55px;" icon="ui-icon-search"  action="/pages/aquisicao/listAddEdit.faces" ajax="false" />                
-                    <p:commandButton value="#{labels.processo_producao}"  style="border-radius: 55px;" icon="ui-icon-search"  action="/pages/producao/listAddEdit.faces" ajax="false" />                
-                    <p:commandButton value="#{labels.processo_saida}"  style="border-radius: 55px;" onclick="PF('dlgLeis').show();"  icon="ui-icon-search"  />                
+                    <p:commandButton value="#{labels.processo_entrada}"  style="margin-left: 38px;border-radius: 55px;" icon=" ui-icon-cart"  action="/pages/aquisicao/listAddEdit.faces" ajax="false" />                
+                    <p:commandButton value="#{labels.processo_producao}"  style="border-radius: 55px;" icon="ui-icon-wrench"  action="/pages/producao/listAddEdit.faces" ajax="false" />                
+                    <p:commandButton value="#{labels.processo_saida}"  style="border-radius: 55px;" onclick="PF('dlgLeis').show();"  icon="ui-icon-signal"  />                
 
                     
                     
