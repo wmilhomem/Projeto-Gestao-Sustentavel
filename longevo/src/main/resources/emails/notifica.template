@@ -3,11 +3,11 @@
         <table>
             <tr>
                 <td style="width: 100px">Número:</td>
-                <td>$pedido.id</td>
+                <td>$notificacao.id</td>
             </tr>
             <tr>
                 <td>Cliente:</td>
-                <td>$pedido.cliente.nome</td>
+                <td>$notificacao.cliente.nome</td>
             </tr>
             <tr>
                 <td>Valor total:</td>
